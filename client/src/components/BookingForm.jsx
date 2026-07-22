@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import bookingApi from "../api/bookingApi";
@@ -27,6 +28,7 @@ const labelStyle = {
 };
 
 const BookingForm = ({ room, onSuccess }) => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     checkIn: todayStr(),
     checkOut: "",
@@ -50,8 +52,22 @@ const BookingForm = ({ room, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.checkOut) {
+      toast.error("Check-out date is required");
+      return;
+    }
     if (!nights) {
-      toast.error("Please select a valid check-out date");
+      toast.error("Please select a valid check-out date after check-in");
+      return;
+    }
+    const maxGuests = room?.guests || room?.capacity || 10;
+    const guests = Number(form.guestsCount);
+    if (!guests || guests < 1) {
+      toast.error("At least one guest is required");
+      return;
+    }
+    if (guests > maxGuests) {
+      toast.error(`This room allows up to ${maxGuests} guests`);
       return;
     }
     if (room.status !== "available") {
@@ -61,9 +77,19 @@ const BookingForm = ({ room, onSuccess }) => {
 
     setLoading(true);
     try {
-      const res = await bookingApi.create({ room: room._id, ...form });
-      toast.success("Booking request submitted!");
-      onSuccess?.(res.data.booking);
+      const res = await bookingApi.create({
+        room: room._id,
+        ...form,
+        guestsCount: guests,
+      });
+      const booking = res.data?.booking;
+      if (!booking?._id) {
+        toast.error("Booking was created but no booking ID was returned");
+        return;
+      }
+      toast.success("Booking confirmed! Redirecting to billing...");
+      onSuccess?.(booking);
+      navigate(`/billing/${booking._id}`, { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || "Booking failed");
     } finally {

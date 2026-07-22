@@ -37,7 +37,6 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-// import AsideBarGuest from "../components/AsidebarGuest";
 import useAuth from "../hooks/useAuth";
 
 import {
@@ -46,6 +45,8 @@ import {
   uploadProfileImage,
   changePassword,
 } from "../api/userApi";
+import bookingApi from "../api/bookingApi";
+import notificationApi from "../api/notificationApi";
 
 import {
   COLORS,
@@ -77,6 +78,10 @@ function GuestProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [userBookings, setUserBookings] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   const [tab, setTab] = useState(
     authUser?.role === "guest" ? "stay" : "profile"
@@ -100,23 +105,60 @@ function GuestProfilePage() {
 
   useEffect(() => {
     loadProfile();
+    if (isGuest) {
+      loadUserBookings();
+      loadNotifications();
+    }
   }, []);
 
   const loadProfile = async () => {
     try {
       setLoading(true);
-
       const data = await getMyProfile();
-
       setProfile(data.user);
     } catch (err) {
       setError(
         err.response?.data?.message ||
           "Unable to load profile"
-        
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadUserBookings = async () => {
+    try {
+      setBookingLoading(true);
+      // Get all bookings for the user
+      const response = await bookingApi.getAll();
+      const bookingsData = response?.data?.bookings || response?.bookings || [];
+      
+      // Filter bookings for the current user
+      const userBookingsData = bookingsData.filter(
+        (booking) => booking.guest?._id === profile._id || booking.guest === profile._id
+      );
+      
+      setUserBookings(userBookingsData);
+    } catch (error) {
+      console.error("Error loading bookings:", error);
+      setUserBookings([]);
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
+  const loadNotifications = async () => {
+    try {
+      setNotificationLoading(true);
+      const response = await notificationApi.getMine();
+      const notificationsData = response?.data?.notifications || response?.notifications || [];
+      // Get only the 3 most recent notifications
+      setNotifications(notificationsData.slice(0, 3));
+    } catch (error) {
+      console.error("Error loading notifications:", error);
+      setNotifications([]);
+    } finally {
+      setNotificationLoading(false);
     }
   };
 
@@ -288,7 +330,6 @@ function GuestProfilePage() {
   return (
     <PageShell>
       <div className="mx-auto w-full max-w-[1280px]">
-        {/* Go to Home Button - Clean Version */}
         <div className="mb-6">
           <Link
             to="/"
@@ -368,7 +409,6 @@ function GuestProfilePage() {
             onClick={() => setTab("profile")}
           />
 
-
           <TabButton
             label="Security"
             icon={KeyRound}
@@ -383,8 +423,7 @@ function GuestProfilePage() {
               active={tab === "services"}
               onClick={() => setTab("services")}
             />
-          )
-          }
+          )}
 
           {isGuest && (
             <TabButton
@@ -392,14 +431,18 @@ function GuestProfilePage() {
               icon={Wrench}
               active={tab === "maintenance"}
               onClick={() => setTab("maintenance")}
-            /> 
+            />
           )}
-
-
         </div>
 
         {isGuest && tab === "stay" && (
-          <GuestStayContent profile={profile} />
+          <GuestStayContent 
+            profile={profile}
+            bookings={userBookings}
+            notifications={notifications}
+            loading={bookingLoading}
+            notificationLoading={notificationLoading}
+          />
         )}
 
         {tab === "profile" && (
@@ -428,8 +471,8 @@ function GuestProfilePage() {
         )}
 
         {isGuest && tab === "maintenance" && (
-  <ServiceRequestPage />
-)}
+          <ServiceRequestPage />
+        )}
       </div>
     </PageShell>
   );
@@ -451,8 +494,6 @@ function PageShell({ children }) {
         fontFamily: FONTS.BODY,
       }}
     >
-      
-
       <main className="min-w-0 flex-1 px-4 py-5 sm:px-7 lg:px-10 lg:py-8">
         {children}
       </main>
@@ -491,9 +532,7 @@ function ProfileHero({
       />
 
       <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-
         <div className="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
-
           <div className="relative shrink-0">
             <div
               className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-[28px] border-4 sm:h-32 sm:w-32"
@@ -611,75 +650,62 @@ function ProfileHero({
   );
 }
 
-function GuestStayContent() {
-  const bookings = [
-    {
-      key: "current",
-      status: "Current Stay",
-      room: "Deluxe Suite",
+  function GuestStayContent({ profile, bookings, notifications, loading, notificationLoading }) {
+  // Process bookings to match the expected format
+  const processedBookings = bookings.map(booking => {
+    const checkIn = new Date(booking.checkIn);
+    const checkOut = new Date(booking.checkOut);
+    const today = new Date();
+    const isCurrent = today >= checkIn && today <= checkOut;
+    const nights = booking.nights || Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+    const dayOfStay = isCurrent ? Math.ceil((today - checkIn) / (1000 * 60 * 60 * 24)) : 1;
+    
+    return {
+      key: booking._id,
+      status: isCurrent ? "Current Stay" : "Last Stay",
+      room: booking.room?.type || "Luxury Room",
       location: "LuxuryStay",
-      meta: "Room 402 · Day 3 of 5",
-      active: true,
-    },
-    {
-      key: "upcoming",
-      status: "Upcoming",
-      room: "Deluxe King",
-      location: "LuxuryStay",
-      meta: "Your next reservation",
-      active: false,
-    },
-  ];
+      meta: isCurrent 
+        ? `Room ${booking.room?.roomNumber || '-'} · Day ${dayOfStay} of ${nights}`
+        : `Room ${booking.room?.roomNumber || '-'} · Day ${dayOfStay} of ${nights}`,
+      active: isCurrent,
+      guests: `${booking.guestsCount || 2} Adults`,
+      checkIn: checkIn.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+      checkOut: checkOut.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+      dayOfStay: dayOfStay,
+      totalDays: nights,
+      roomNumber: booking.room?.roomNumber || '—',
+    };
+  });
 
-  const currentBooking = {
-    room: "Deluxe Suite",
-    guests: "2 Adults",
-    checkIn: "10 Jul",
-    checkOut: "15 Jul",
-    dayOfStay: 3,
-    totalDays: 5,
-  };
+  // Get current booking (first one that is active)
+  const currentBookingData = processedBookings.find(b => b.active);
+  // Get last booking (first inactive booking)
+  const lastBookingData = processedBookings.find(b => !b.active);
 
-  const recentActivity = [
-    {
-      icon: Clock3,
-      title: "Room Service Requested",
-      time: "Today, 10:30 AM",
-    },
+  // Format notifications for activity display
+  const activityItems = notifications.map(notif => ({
+    icon: notif.type === 'booking' ? CalendarDays : 
+          notif.type === 'payment' ? CreditCard : 
+          notif.type === 'service' ? Coffee : Clock3,
+    title: notif.title || "Notification",
+    time: notif.createdAt ? new Date(notif.createdAt).toLocaleString() : "Just now",
+  }));
+
+  // Default activities if no notifications
+  const defaultActivities = [
     {
       icon: CalendarDays,
-      title: "Booking Confirmed",
-      time: "Yesterday, 2:15 PM",
-    },
-    {
-      icon: CreditCard,
-      title: "Payment Successful",
-      time: "2 days ago",
-    },
+      title: "Welcome to LuxuryStay",
+      time: "Your account is ready",
+    }
   ];
 
-  const stayInfoRows = [
-    {
-      label: "Wi-Fi",
-      value: "LuxuryStay_Guest",
-    },
-    {
-      label: "Breakfast",
-      value: "7:00 – 10:30 AM",
-    },
-    {
-      label: "Check-out",
-      value: "12:00 PM",
-    },
-    {
-      label: "Room Number",
-      value: "402",
-    },
-  ];
+  const displayActivities = activityItems.length > 0 ? activityItems : defaultActivities;
 
   return (
     <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(300px,0.85fr)]">
-
+      {/* LEFT COLUMN - Current Stay */}
       <div className="grid min-w-0 gap-6">
         <section>
           <div className="mb-3 flex items-center justify-between">
@@ -699,21 +725,63 @@ function GuestStayContent() {
                 color: COLORS.TEXT_SECONDARY,
               }}
             >
-              2 reservations
+              {processedBookings.length} reservation{processedBookings.length !== 1 ? "s" : ""}
             </span>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {bookings.map((booking) => (
-              <BookingCard
-                key={booking.key}
-                {...booking}
-              />
-            ))}
+            {loading ? (
+              <div className="col-span-2 text-center py-4">
+                <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>Loading bookings...</p>
+              </div>
+            ) : (
+              <>
+                {/* LEFT CARD - Current Stay */}
+                {currentBookingData ? (
+                  <BookingCard
+                    key={currentBookingData.key}
+                    status="Current Stay"
+                    room={currentBookingData.room}
+                    location={currentBookingData.location}
+                    meta={currentBookingData.meta}
+                    active={true}
+                  />
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>No current stay</p>
+                  </div>
+                )}
+
+                {/* RIGHT CARD - Last Stay */}
+                {lastBookingData ? (
+                  <BookingCard
+                    key={lastBookingData.key}
+                    status="Last Stay"
+                    room={lastBookingData.room}
+                    location={lastBookingData.location}
+                    meta={lastBookingData.meta}
+                    active={false}
+                  />
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>No last stay</p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </section>
 
-        <CurrentBookingCard {...currentBooking} />
+        {currentBookingData && (
+          <CurrentBookingCard
+            room={currentBookingData.room}
+            guests={currentBookingData.guests}
+            checkIn={currentBookingData.checkIn}
+            checkOut={currentBookingData.checkOut}
+            dayOfStay={currentBookingData.dayOfStay}
+            totalDays={currentBookingData.totalDays}
+          />
+        )}
 
         <section
           className="rounded-[18px] border p-5 sm:p-6"
@@ -741,45 +809,58 @@ function GuestStayContent() {
           </div>
 
           <div className="grid gap-3">
-            {recentActivity.map((activity) => (
-              <ActivityItem
-                key={activity.title}
-                {...activity}
-              />
-            ))}
+            {notificationLoading ? (
+              <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>Loading activities...</p>
+            ) : displayActivities.length > 0 ? (
+              displayActivities.map((activity, index) => (
+                <ActivityItem
+                  key={index}
+                  icon={activity.icon}
+                  title={activity.title}
+                  time={activity.time}
+                />
+              ))
+            ) : (
+              <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>No recent activity</p>
+            )}
           </div>
         </section>
       </div>
 
+      {/* RIGHT COLUMN - Stay Information */}
       <div className="grid content-start gap-6">
-        <AccountSnapshot />
-
+        <AccountSnapshot profile={profile} />
         <InfoCard
           title="Stay Information"
           icon={MapPin}
-          rows={stayInfoRows}
+          rows={[
+            { label: "Wi-Fi", value: "LuxuryStay_Guest" },
+            { label: "Breakfast", value: "7:00 – 10:30 AM" },
+            { label: "Check-out", value: "12:00 PM" },
+            { label: "Room Number", value: lastBookingData?.roomNumber || currentBookingData?.roomNumber || "—" },
+          ]}
         />
       </div>
     </div>
   );
 }
 
-function AccountSnapshot() {
+function AccountSnapshot({ profile }) {
   const stats = [
     {
       icon: Hash,
       label: "Member ID",
-      value: "GX-48213",
+      value: profile?._id?.slice(-8).toUpperCase() || "GX-48213",
     },
     {
       icon: Award,
       label: "Loyalty Tier",
-      value: "Gold",
+      value: profile?.loyaltyTier || "Gold",
     },
     {
       icon: Gift,
       label: "Reward Points",
-      value: "3,200",
+      value: profile?.rewardPoints?.toLocaleString() || "3,200",
     },
   ];
 
@@ -851,6 +932,10 @@ function AccountSnapshot() {
   );
 }
 
+// All other components remain the same...
+// (ProfileInformation, RoleCard, AccountDetailsCard, SecurityContent, 
+// GuestServicesContent, FieldInput, PasswordField)
+
 function ProfileInformation({
   profile,
   isGuest,
@@ -861,7 +946,6 @@ function ProfileInformation({
 }) {
   return (
     <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]">
-
       <ProfileSection
         title="Personal Information"
         icon={User}
@@ -1219,7 +1303,6 @@ function SecurityContent({
 }) {
   return (
     <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.8fr)]">
-
       <ProfileSection
         title="Change Password"
         icon={LockKeyhole}
@@ -1382,7 +1465,6 @@ function GuestServicesContent() {
           Discover services designed to make your stay
           more comfortable.
         </p>
-        
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1393,21 +1475,21 @@ function GuestServicesContent() {
           />
         ))}
       </div>
-<div className="mt-8">
-  <button
-    type="button"
-    onClick={() => navigate("/guest/services")}
-    className="w-full flex items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold transition-transform hover:-translate-y-0.5"
-    style={{
-      background: COLORS.PRIMARY,
-      color: COLORS.CREAM,
-      boxShadow: SHADOWS.CARD,
-    }}
-  >
-    <ConciergeBell size={18} />
-    Request a Service
-  </button>
-</div>
+      <div className="mt-8">
+        <button
+          type="button"
+          onClick={() => navigate("/guest/services")}
+          className="w-full flex items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold transition-transform hover:-translate-y-0.5"
+          style={{
+            background: COLORS.PRIMARY,
+            color: COLORS.CREAM,
+            boxShadow: SHADOWS.CARD,
+          }}
+        >
+          <ConciergeBell size={18} />
+          Request a Service
+        </button>
+      </div>
     </section>
   );
 }
@@ -1433,7 +1515,6 @@ function FieldInput({
         )}
 
         {label}
-        
       </label>
 
       <input
@@ -1447,7 +1528,6 @@ function FieldInput({
           "--tw-ring-color": "rgba(200,169,106,0.25)",
         }}
       />
-      
     </div>
   );
 }

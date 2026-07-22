@@ -470,7 +470,11 @@ element={
 
 <Route
   path="/rooms/experience/:id"
-  element={<RoomExperience />}
+  element={
+    <Layout showFooter>
+  <RoomExperience />
+  </Layout>
+  }
 />
 
 <Route

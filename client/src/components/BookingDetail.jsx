@@ -1,129 +1,229 @@
 import React from "react";
-import { ReceiptText } from "lucide-react";
 import { COLORS } from "../constants/theme";
+import {
+  CalendarDays,
+  Bed,
+  User,
+  Hash,
+  Moon,
+  Users,
+  Mail,
+  Phone,
+  CircleDollarSign,
+} from "lucide-react";
 
-const BillingDetails = ({ booking }) => {
-  const lines =
-    booking?.chargeLines?.length > 0
-      ? booking.chargeLines
-      : null;
+const statusLabel = (status) => {
+  if (!status) return "—";
+  return status
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+};
 
-  const taxLabel =
-    booking?.taxRate != null
-      ? `Tax (${Math.round(Number(booking.taxRate) * 100)}%)`
-      : "Tax";
-
+const BookingDetails = ({ booking }) => {
   return (
     <div
       className="
         w-full
         rounded-3xl
+        mt-6
         p-5
         sm:p-6
+        lg:p-8
         border
-        shadow-[0_8px_30px_rgba(0,0,0,0.12),0_-4px_20px_rgba(0,0,0,0.06)]
+        transition-all
+        duration-300
       "
       style={{
         backgroundColor: COLORS.SURFACE,
         borderColor: COLORS.BORDER,
+        boxShadow: COLORS.CARD,
       }}
     >
-      <div className="flex items-center gap-2 mb-5">
-        <ReceiptText size={22} style={{ color: COLORS.PRIMARY }} />
-        <h2
-          className="text-xl sm:text-2xl font-bold"
-          style={{ color: COLORS.PRIMARY }}
-        >
-          Billing Details
-        </h2>
-      </div>
+      <h2
+        className="text-lg sm:text-xl lg:text-2xl font-bold mb-6"
+        style={{ color: COLORS.PRIMARY }}
+      >
+        Booking Details
+      </h2>
 
       <div
-        className="border-y py-3"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-6 border-b"
         style={{ borderColor: COLORS.BORDER }}
       >
-        <div
-          className="grid grid-cols-[2fr_1fr] items-center font-bold text-base"
-          style={{ color: COLORS.TEXT_PRIMARY }}
-        >
-          <p>Description</p>
-          <p className="text-right">Amount (PKR)</p>
-        </div>
-      </div>
-
-      <div className="space-y-2 py-4">
-        {lines ? (
-          lines.map((line, index) => (
-            <div
-              key={`${line.label}-${index}`}
-              className={`grid grid-cols-[2fr_1fr] items-center py-2 ${
-                index < lines.length - 1 ? "border-b" : ""
-              }`}
-              style={{ borderColor: COLORS.BORDER }}
-            >
-              <p style={{ color: COLORS.TEXT_SECONDARY }}>{line.label}</p>
-              <p
-                className="text-right font-semibold"
-                style={{ color: COLORS.TEXT_PRIMARY }}
-              >
-                PKR {line.amount}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p className="text-sm" style={{ color: COLORS.TEXT_SECONDARY }}>
-            No charge items found.
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Hash size={17} />
+            <span>Booking ID</span>
+          </div>
+          <p className="font-semibold mt-2 break-all" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.bookingId || "—"}
           </p>
-        )}
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <User size={17} />
+            <span>Guest Name</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.guestName || "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Mail size={17} />
+            <span>Email</span>
+          </div>
+          <p className="font-semibold mt-2 break-all" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.guestEmail || "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Phone size={17} />
+            <span>Phone</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.guestPhone || "—"}
+          </p>
+        </div>
       </div>
 
       <div
-        className="mt-4 rounded-2xl border p-4"
-        style={{
-          backgroundColor: COLORS.BACKGROUND,
-          borderColor: COLORS.BORDER,
-        }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 border-b"
+        style={{ borderColor: COLORS.BORDER }}
       >
-        <div className="flex justify-between py-2">
-          <span style={{ color: COLORS.TEXT_SECONDARY }}>Subtotal</span>
-          <span className="font-semibold" style={{ color: COLORS.TEXT_PRIMARY }}>
-            PKR {booking?.subtotal ?? "—"}
-          </span>
-        </div>
-
-        <div className="flex justify-between py-2">
-          <span style={{ color: COLORS.TEXT_SECONDARY }}>{taxLabel}</span>
-          <span className="font-semibold" style={{ color: COLORS.TEXT_PRIMARY }}>
-            PKR {booking?.tax ?? "—"}
-          </span>
-        </div>
-
-        <div className="flex justify-between py-2">
-          <span style={{ color: COLORS.TEXT_SECONDARY }}>Discount</span>
-          <span className="font-semibold" style={{ color: COLORS.SUCCESS }}>
-            - PKR {booking?.discount ?? "0"}
-          </span>
-        </div>
-
-        <hr className="my-3" style={{ borderColor: COLORS.BORDER }} />
-
-        <div className="flex justify-between items-center">
-          <h2
-            className="text-xl sm:text-2xl font-bold"
-            style={{ color: COLORS.PRIMARY }}
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
           >
-            Grand Total
-          </h2>
-          <h2
-            className="text-2xl sm:text-3xl font-bold"
-            style={{ color: COLORS.PRIMARY }}
+            <Bed size={17} />
+            <span>Room</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.roomName || booking?.roomType || "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
           >
-            PKR {booking?.grandTotal ?? "—"}
-          </h2>
+            <Bed size={17} />
+            <span>Room Number</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.roomNumber ?? "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Users size={17} />
+            <span>Guests</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.guestsCount ?? "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <CircleDollarSign size={17} />
+            <span>Price / Night</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.pricePerNight != null && booking?.pricePerNight !== "—"
+              ? `PKR ${booking.pricePerNight}`
+              : "—"}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <CalendarDays size={17} />
+            <span>Check-in Date</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.checkInDate || "—"}
+          </p>
+          <p className="text-sm mt-1" style={{ color: COLORS.TEXT_SECONDARY }}>
+            {booking?.checkInTime || ""}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <CalendarDays size={17} />
+            <span>Check-out Date</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.checkOutDate || "—"}
+          </p>
+          <p className="text-sm mt-1" style={{ color: COLORS.TEXT_SECONDARY }}>
+            {booking?.checkOutTime || ""}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Moon size={17} />
+            <span>Total Nights</span>
+          </div>
+          <p className="font-semibold mt-2" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {booking?.totalNights || "—"}
+          </p>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-2 text-sm"
+            style={{ color: COLORS.TEXT_SECONDARY }}
+          >
+            <Hash size={17} />
+            <span>Booking Status</span>
+          </div>
+          <p className="font-semibold mt-2 capitalize" style={{ color: COLORS.TEXT_PRIMARY }}>
+            {statusLabel(booking?.bookingStatus)}
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default BillingDetails;
+export default BookingDetails;

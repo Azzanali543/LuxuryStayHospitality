@@ -1,1 +1,72 @@
 @import "tailwindcss";
+/* @tailwind base;
+@tailwind components; */
+@tailwind utilities;
+  
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  color: #2b1114;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Slim, tinted scrollbars that fit the maroon theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a63446 #f4e9ea;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: #f4e9ea;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #c98a95;
+  border-radius: 999px;
+}
+
+/* Visible keyboard focus everywhere, luxury-tinted */
+:focus-visible {
+  outline: 2px solid #a63446;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print rules: only the invoice printable area is shown when printing */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #invoice-printable,
+  #invoice-printable * {
+    visibility: visible;
+  }
+  #invoice-printable {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    padding: 24px;
+    box-shadow: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

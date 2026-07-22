@@ -137,10 +137,15 @@ export default function GalleryPage() {
     document.body.style.overflow = "auto";
   };
 
-  const showPrev = () =>
+  const showPrev = (e) => {
+    e?.stopPropagation();
     setSelectedIndex((i) => (i === 0 ? filteredImages.length - 1 : i - 1));
-  const showNext = () =>
+  };
+  
+  const showNext = (e) => {
+    e?.stopPropagation();
     setSelectedIndex((i) => (i === filteredImages.length - 1 ? 0 : i + 1));
+  };
 
   useEffect(() => {
     return () => {
@@ -168,9 +173,8 @@ export default function GalleryPage() {
       className="min-h-screen"
       style={{ fontFamily: FONTS.BODY, background: COLORS.BACKGROUND }}
     >
-      {/* Enhanced Hero Section */}
+      {/* Hero Section */}
       <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden">
-        {/* Background Image with Enhanced Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -178,8 +182,6 @@ export default function GalleryPage() {
             transform: "scale(1.05)",
           }}
         />
-        
-        {/* Gradient Overlay - Enhanced */}
         <div 
           className="absolute inset-0"
           style={{
@@ -189,15 +191,10 @@ export default function GalleryPage() {
             `
           }}
         />
-
-        {/* Decorative Accent Lines */}
         <div className="absolute top-0 left-0 w-1/3 h-px" style={{ background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)` }} />
         <div className="absolute bottom-0 right-0 w-1/4 h-px" style={{ background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)` }} />
-
-        {/* Content Container */}
         <div className="relative z-10 w-full container mx-auto px-6 md:px-12">
           <div className="flex flex-col items-start max-w-3xl">
-            {/* Breadcrumb / Category Label */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -221,8 +218,6 @@ export default function GalleryPage() {
                 Gallery
               </span>
             </motion.div>
-
-            {/* Main Title */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -237,8 +232,6 @@ export default function GalleryPage() {
               Our <br className="sm:hidden" />
               <span style={{ color: COLORS.ACCENT }}>Gallery</span>
             </motion.h1>
-
-            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -252,15 +245,12 @@ export default function GalleryPage() {
             >
               Explore the elegance and beauty of LuxuryStay through our curated collection of spaces and moments.
             </motion.p>
-
-            {/* Stats & CTA Row - Enhanced Alignment */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap items-center gap-6 md:gap-10"
             >
-              {/* Stats Group */}
               <div className="flex items-center gap-6 md:gap-8">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full"
@@ -277,9 +267,7 @@ export default function GalleryPage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="w-px h-10" style={{ background: "rgba(248,246,243,0.15)" }} />
-
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full"
                     style={{ background: `rgba(212, 168, 130, 0.15)` }}
@@ -296,11 +284,7 @@ export default function GalleryPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Divider */}
               <div className="w-px h-8 hidden md:block" style={{ background: "rgba(248,246,243,0.15)" }} />
-
-              {/* CTA Button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -321,8 +305,6 @@ export default function GalleryPage() {
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll Indicator */}
         <motion.div 
           className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
           initial={{ opacity: 0 }}
@@ -431,8 +413,6 @@ export default function GalleryPage() {
                         filter: isHovered ? "brightness(0.7)" : "brightness(1)",
                       }}
                     />
-
-                    {/* Overlay */}
                     <div 
                       className="absolute inset-0 transition-opacity duration-500"
                       style={{
@@ -465,8 +445,6 @@ export default function GalleryPage() {
                         </motion.div>
                       </div>
                     </div>
-
-                    {/* Category Tag */}
                     <div className="absolute top-3 left-3">
                       <span 
                         className="px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-full backdrop-blur-sm"
@@ -485,8 +463,6 @@ export default function GalleryPage() {
               );
             })}
           </div>
-
-          {/* Empty State */}
           {filteredImages.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -502,69 +478,97 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Lightbox - Minimal & Elegant */}
+      {/* Lightbox */}
       <AnimatePresence>
         {selectedIndex !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-[999] flex items-center justify-center"
             style={{ background: "rgba(10,8,7,0.92)" }}
             onClick={closeLightbox}
           >
-            {/* Close */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={closeLightbox}
-              className="absolute top-4 right-4 md:top-8 md:right-8 p-2 rounded-full transition-colors"
-              style={{ background: "rgba(255,255,255,0.05)" }}
-              whileHover={{ background: "rgba(255,255,255,0.1)" }}
-            >
-              <XMarkIcon className="w-6 h-6 text-white" />
-            </motion.button>
-
-            {/* Navigation */}
+            {/* Close Button - Left Top */}
             <motion.button
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              onClick={(e) => { e.stopPropagation(); showPrev(); }}
-              className="absolute left-4 md:left-8 p-2 rounded-full transition-colors"
-              style={{ background: "rgba(255,255,255,0.05)" }}
-              whileHover={{ background: "rgba(255,255,255,0.1)" }}
+              onClick={closeLightbox}
+              className="absolute top-4 left-4 md:top-8 md:left-8 mt-12 p-2.5 rounded-full transition-all duration-300 z-10"
+              style={{ 
+                background: "rgba(255,255,255,0.08)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.08)"
+              }}
+              whileHover={{ 
+                background: "rgba(255,255,255,0.15)",
+                scale: 1.05
+              }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <XMarkIcon className="w-6 h-6 text-white" />
+            </motion.button>
+
+            {/* Navigation - Left */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              onClick={showPrev}
+              className="absolute left-4 md:left-16 p-3 rounded-full transition-all duration-300 z-10"
+              style={{ 
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.05)"
+              }}
+              whileHover={{ 
+                background: "rgba(255,255,255,0.1)",
+                scale: 1.05
+              }}
+              whileTap={{ scale: 0.9 }}
             >
               <ChevronLeftIcon className="w-6 h-6 text-white" />
             </motion.button>
 
+            {/* Navigation - Right */}
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              onClick={(e) => { e.stopPropagation(); showNext(); }}
-              className="absolute right-4 md:right-8 p-2 rounded-full transition-colors"
-              style={{ background: "rgba(255,255,255,0.05)" }}
-              whileHover={{ background: "rgba(255,255,255,0.1)" }}
+              onClick={showNext}
+              className="absolute right-4 md:right-8 p-3 rounded-full transition-all duration-300 z-10"
+              style={{ 
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.05)"
+              }}
+              whileHover={{ 
+                background: "rgba(255,255,255,0.1)",
+                scale: 1.05
+              }}
+              whileTap={{ scale: 0.9 }}
             >
               <ChevronRightIcon className="w-6 h-6 text-white" />
             </motion.button>
 
-            {/* Image */}
+            {/* Image Container */}
             <motion.div
               key={selectedIndex}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative max-w-5xl w-full mx-4"
+              className="relative max-w-5xl w-full mx-4 cursor-default"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={filteredImages[selectedIndex].src}
                 alt={filteredImages[selectedIndex].alt}
                 className="w-full h-auto max-h-[75vh] object-contain rounded-lg shadow-2xl"
+                style={{ 
+                  boxShadow: "0 20px 60px rgba(0,0,0,0.8)"
+                }}
               />
 
               {/* Image Info */}
@@ -577,18 +581,22 @@ export default function GalleryPage() {
                   background: "linear-gradient(to top, rgba(10,8,7,0.9) 0%, transparent 100%)"
                 }}
               >
-                <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
-                  {filteredImages[selectedIndex].category}
-                </p>
-                <h3 className="text-white text-lg font-light">
-                  {filteredImages[selectedIndex].title || "Untitled"}
-                </h3>
-                <p className="text-white/50 text-sm mt-1">
-                  {filteredImages[selectedIndex].description || ""}
-                </p>
-                <p className="text-white/30 text-xs mt-2">
-                  {selectedIndex + 1} / {filteredImages.length}
-                </p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/50 text-xs uppercase tracking-wider mb-1">
+                      {filteredImages[selectedIndex].category}
+                    </p>
+                    <h3 className="text-white text-lg font-light">
+                      {filteredImages[selectedIndex].title || "Untitled"}
+                    </h3>
+                    <p className="text-white/40 text-sm mt-1">
+                      {filteredImages[selectedIndex].description || ""}
+                    </p>
+                  </div>
+                  <span className="text-white/30 text-xs">
+                    {selectedIndex + 1} / {filteredImages.length}
+                  </span>
+                </div>
               </motion.div>
             </motion.div>
           </motion.div>

@@ -734,7 +734,7 @@ function ServiceCard({ service, qty, onQtyChange, onAdd }) {
           className="absolute top-2.5 left-2.5 text-xs font-semibold px-2.5 py-1"
           style={{ background: COLORS.SURFACE, color: COLORS.TEXT_PRIMARY, borderRadius: BORDER_RADIUS.PILL }}
         >
-          ${service.price.toFixed(2)}
+          Rs{service.price.toFixed(2)}
         </span>
         <span
           className="absolute top-2.5 right-2.5 text-[10px] font-semibold px-2.5 py-1 text-white"

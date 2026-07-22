@@ -22,6 +22,10 @@ import {
   Utensils,
   Dumbbell,
   ParkingCircle,
+  Wind,
+  Thermometer,
+  Droplets,
+  Shield,
 } from "lucide-react";
 
 import { getRoomById, getAllRooms } from "../api/roomApi";
@@ -48,7 +52,19 @@ const amenityIcons = {
   Breakfast: Utensils,
   Gym: Dumbbell,
   Parking: ParkingCircle,
+  "Air Purifier": Wind,
+  "Heating": Thermometer,
+  "Rain Shower": Droplets,
+  "Soundproofing": Shield,
 };
+
+// Static amenities to show in the room details
+const STATIC_AMENITIES = [
+  "Air Purifier",
+  "Heating",
+  "Rain Shower",
+  "Soundproofing",
+];
 
 export default function RoomExperience() {
   const { id } = useParams();
@@ -62,12 +78,21 @@ export default function RoomExperience() {
   const [isLiked, setIsLiked] = useState(false);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [bookedJustNow, setBookedJustNow] = useState(false);
+  const [allRooms, setAllRooms] = useState([]);
 
   useEffect(() => {
     const loadRoom = async () => {
       try {
         setLoading(true);
 
+        // Fetch all rooms first
+        const allRoomsResponse = await getAllRooms();
+        const allRoomsData = Array.isArray(allRoomsResponse)
+          ? allRoomsResponse
+          : allRoomsResponse?.rooms || allRoomsResponse?.data || [];
+        setAllRooms(allRoomsData);
+
+        // Fetch current room
         const response = await getRoomById(id);
         const roomData = response?.room || response?.data || response;
 
@@ -79,17 +104,25 @@ export default function RoomExperience() {
         setRoom(roomData);
         setActiveImage(roomData.image || roomData.gallery?.[0] || "/rooms/default-room.jpg");
 
-        // Load similar rooms
-        const allRoomsResponse = await getAllRooms();
-        const allRooms = Array.isArray(allRoomsResponse)
-          ? allRoomsResponse
-          : allRoomsResponse?.rooms || allRoomsResponse?.data || [];
+        // Find similar rooms based on type or category - LIMIT TO 3
+        const similarRooms = allRoomsData
+          .filter((r) => r._id !== roomData._id)
+          .filter((r) => {
+            // First try to match by type
+            if (r.type === roomData.type) return true;
+            // Then try to match by price range (±30%)
+            if (r.price && roomData.price) {
+              const minPrice = roomData.price * 0.7;
+              const maxPrice = roomData.price * 1.3;
+              if (r.price >= minPrice && r.price <= maxPrice) return true;
+            }
+            // Then try to match by guests capacity
+            if (r.guests === roomData.guests) return true;
+            return false;
+          })
+          .slice(0, 3); // Limit to 3 similar rooms
 
-        setSimilar(
-          allRooms
-            .filter((r) => r._id !== roomData._id)
-            .slice(0, 3)
-        );
+        setSimilar(similarRooms);
       } catch (error) {
         console.error("Failed to load room:", error.response?.data || error);
         setRoom(null);
@@ -163,7 +196,9 @@ export default function RoomExperience() {
     ...(Array.isArray(room.gallery) ? room.gallery : []),
   ].filter(Boolean);
 
-  const amenities = Array.isArray(room.amenities) ? room.amenities : [];
+  const dynamicAmenities = Array.isArray(room.amenities) ? room.amenities : [];
+  const allAmenities = [...dynamicAmenities, ...STATIC_AMENITIES];
+  
   const highlights = Array.isArray(room.highlights) ? room.highlights : [];
 
   const isBooked =
@@ -246,13 +281,13 @@ export default function RoomExperience() {
                 <div className="flex items-center gap-1">
                   <Star size={16} fill={COLORS.WARNING} style={{ color: COLORS.WARNING }} />
                   <span className="text-sm" style={{ color: COLORS.CREAM }}>
-                    {room.rating || "4.8"}
+                    {room.rating || "4.5"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
                   <MapPin size={16} style={{ color: "rgba(248,246,243,0.5)" }} />
                   <span className="text-xs" style={{ color: "rgba(248,246,243,0.5)" }}>
-                    {room.bar|| "-"}
+                    {room.bar || "-"}
                   </span>
                 </div>
               </div>
@@ -379,8 +414,8 @@ export default function RoomExperience() {
                   Amenities
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {amenities.length > 0 ? (
-                    amenities.map((amenity, index) => {
+                  {allAmenities.length > 0 ? (
+                    allAmenities.map((amenity, index) => {
                       const Icon = amenityIcons[amenity] || CheckCircle;
                       return (
                         <div
@@ -422,7 +457,7 @@ export default function RoomExperience() {
                     { icon: Users, label: "Guests", value: room.guests || "-" },
                     { icon: Maximize, label: "Size", value: roomArea },
                     { icon: BedDouble, label: "Bed", value: room.bed || "-" },
-                    { icon: Mountain, label: "Bar", value: room.bar || "" },
+                    { icon: Mountain, label: "Bar", value: room.bar || "-" },
                   ].map((item, index) => {
                     const Icon = item.icon;
                     return (
@@ -477,18 +512,29 @@ export default function RoomExperience() {
                 </motion.div>
               )}
 
-              {/* Similar Rooms */}
+              {/* Similar / Recommended Rooms - Limited to 3 */}
               {similar.length > 0 && (
                 <motion.div {...fadeUp} className="mt-12">
-                  <h3
-                    className="text-xl font-light mb-6"
-                    style={{
-                      fontFamily: FONTS.HEADING,
-                      color: COLORS.PRIMARY,
-                    }}
-                  >
-                    More Rooms You Might Like
-                  </h3>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3
+                      className="text-xl font-light"
+                      style={{
+                        fontFamily: FONTS.HEADING,
+                        color: COLORS.PRIMARY,
+                      }}
+                    >
+                      More Rooms You Might Like
+                    </h3>
+                    <span
+                      className="text-xs px-3 py-1 rounded-full"
+                      style={{
+                        background: `rgba(212, 168, 130, 0.1)`,
+                        color: COLORS.ACCENT,
+                      }}
+                    >
+                      {similar.length} Recommendations
+                    </span>
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     {similar.map((r) => (
                       <Link
@@ -597,7 +643,7 @@ export default function RoomExperience() {
                                   boxShadow: `0 2px 8px rgba(212,168,130,0.2)`,
                                 }}
                               >
-                             Bar
+                                View
                                 <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
                               </button>
                             </div>

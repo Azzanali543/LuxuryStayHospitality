@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   FaCcVisa,
   FaCcMastercard,
@@ -9,7 +9,15 @@ import {
 import { COLORS } from "../constants/theme";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-const PaymentForm = () => {
+import toast from "react-hot-toast";
+import billingApi from "../api/billingApi";
+
+const PaymentForm = ({
+  billingId,
+  amountDue,
+  isPaid = false,
+  onPaymentSuccess,
+}) => {
   const [formData, setFormData] = useState({
     email: "",
     cardNumber: "",
@@ -29,6 +37,8 @@ const PaymentForm = () => {
 
   const [status, setStatus] = useState(null); // "success" or "cancel"
   const [showPopup, setShowPopup] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   // helper: validate single field and set error message
   const validateField = (name, value) => {
@@ -118,20 +128,49 @@ const PaymentForm = () => {
       newErrors[key] = validateField(key, formData[key]);
     });
     setErrors(newErrors);
-
-    // return boolean
-    return Object.values(newErrors).every((v) => v === "");
+    return {
+      valid: Object.values(newErrors).every((v) => v === ""),
+      newErrors,
+    };
   };
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
+
+  if (isPaid) {
+    toast.error("This booking has already been paid.");
+    return;
+  }
+
+  if (!billingId) {
+    toast.error("Billing record is not available. Please refresh the page.");
+    return;
+  }
 
   const ok = validateAll();
 
-  if (ok) {
-    setStatus("success");
+  if (!ok.valid) {
+    setStatus("cancel");
+    setPopupMessage(
+      Object.values(ok.newErrors).filter(Boolean).join(" ") || "Please fix the highlighted fields."
+    );
+    setShowPopup(true);
+    return;
+  }
 
-    // Form Clear
+  setPaying(true);
+  try {
+    const digits = formData.cardNumber.replace(/\s/g, "");
+    const lastFour = digits.slice(-4);
+
+    await billingApi.pay(billingId, {
+      paymentMethod: "card",
+      transactionId: `CARD-${lastFour}-${Date.now()}`,
+    });
+
+    setStatus("success");
+    setPopupMessage("");
+
     setFormData({
       email: "",
       cardNumber: "",
@@ -141,7 +180,6 @@ const handleSubmit = (e) => {
       country: "Pakistan",
     });
 
-    // Errors bhi clear
     setErrors({
       email: "",
       cardNumber: "",
@@ -150,11 +188,16 @@ const handleSubmit = (e) => {
       name: "",
     });
 
-  } else {
+    onPaymentSuccess?.();
+  } catch (err) {
     setStatus("cancel");
+    setPopupMessage(
+      err.response?.data?.message || "Payment could not be processed. Please try again."
+    );
+  } finally {
+    setPaying(false);
+    setShowPopup(true);
   }
-
-  setShowPopup(true);
 };
 
   // build combined reason string for popup when cancelled
@@ -174,6 +217,14 @@ const handleSubmit = (e) => {
 
   return (
     <div className="w-full">
+      {amountDue != null && !isPaid && (
+        <p
+          className="text-sm font-semibold mb-3 text-center"
+          style={{ color: COLORS.PRIMARY }}
+        >
+          Amount due: PKR {Number(amountDue).toLocaleString("en-PK")}
+        </p>
+      )}
       <form
         onSubmit={handleSubmit}
         className="w-full rounded-2xl border p-6 lg:p-8"
@@ -181,6 +232,8 @@ const handleSubmit = (e) => {
           backgroundColor: COLORS.SURFACE,
           borderColor: COLORS.BORDER,
           boxShadow: COLORS.CARD,
+          opacity: isPaid ? 0.65 : 1,
+          pointerEvents: isPaid ? "none" : "auto",
         }}
         noValidate
       >
@@ -311,10 +364,11 @@ const handleSubmit = (e) => {
         {/* Pay Button */}
         <button
           type="submit"
-          className="w-full text-white font-semibold py-3 rounded-md transition duration-300"
+          disabled={paying || isPaid}
+          className="w-full text-white font-semibold py-3 rounded-md transition duration-300 disabled:opacity-60"
           style={{ backgroundColor: COLORS.PRIMARY }}
         >
-          Pay
+          {isPaid ? "Already Paid" : paying ? "Processing..." : "Pay"}
         </button>
       </form>
 
@@ -346,8 +400,8 @@ const handleSubmit = (e) => {
           </h2>
 
           <p className="text-gray-500 mt-3 leading-6">
-            Your payment has been processed successfully.
-            Thank you for your booking.
+            {popupMessage ||
+              "Your payment has been processed successfully. Thank you for your booking."}
           </p>
 
           <button
@@ -371,7 +425,7 @@ const handleSubmit = (e) => {
           </h2>
 
           <p className="text-gray-500 mt-3 leading-6">
-            {getCancelReasons()}
+            {popupMessage || getCancelReasons()}
           </p>
 
           <button
