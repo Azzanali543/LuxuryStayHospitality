@@ -1,44 +1,302 @@
 @import "tailwindcss";
-/* @tailwind base;
-@tailwind components; */
+/* @tailwind base; */
+/* @tailwind components; */
 @tailwind utilities;
-  
+
+
+/* ==========================================================================
+   GLOBAL FOUNDATION
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
-  scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  scroll-behavior: auto;
+
+  /* Hide scrollbar while keeping scrolling enabled */
+  scrollbar-width: none;
+}
+
+/* Chrome / Edge / Safari */
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  margin: 0;
+
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   color: #2b1114;
+
   -webkit-font-smoothing: antialiased;
+
+  /* Prevent horizontal page overflow */
+  overflow-x: hidden;
 }
 
-/* Slim, tinted scrollbars that fit the maroon theme */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #a63446 #f4e9ea;
-}
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-*::-webkit-scrollbar-track {
-  background: #f4e9ea;
-}
-*::-webkit-scrollbar-thumb {
-  background-color: #c98a95;
-  border-radius: 999px;
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  /* Prevent horizontal overflow without disabling vertical scrolling */
+  overflow-x: clip;
 }
 
-/* Visible keyboard focus everywhere, luxury-tinted */
+
+/* ==========================================================================
+   MEDIA
+   ========================================================================== */
+
+img,
+video,
+canvas,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+img,
+video,
+canvas,
+iframe {
+  height: auto;
+}
+
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+
+.contact-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.contact-name-grid,
+.register-name-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+
+/* ==========================================================================
+   AUTH
+   ========================================================================== */
+
+.auth-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-card-panel {
+  width: 100%;
+}
+
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
+table {
+  border-spacing: 0;
+}
+
+.table-scroll,
+.responsive-table {
+  width: 100%;
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+
+/* ==========================================================================
+   KEYBOARD FOCUS
+   ========================================================================== */
+
 :focus-visible {
   outline: 2px solid #a63446;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Respect reduced-motion preferences */
+
+/* ==========================================================================
+   RESPONSIVE FOUNDATION
+   ========================================================================== */
+
+@media (min-width: 768px) {
+
+  /* Footer */
+  .footer-top-grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+
+  /* Contact */
+  .contact-main-grid {
+    grid-template-columns: 1fr 1.4fr;
+  }
+
+  .contact-name-grid,
+  .register-name-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Auth */
+  .auth-card {
+    flex-direction: row;
+  }
+
+  .auth-card-panel {
+    width: 45%;
+  }
+
+  .auth-card-panel.register {
+    width: 42%;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+  /*
+    Prevent fixed-width Tailwind elements from creating horizontal overflow.
+  */
+  [class*="w-["],
+  [class*="min-w-["] {
+    max-width: 100%;
+  }
+
+
+  /* Common fixed widths */
+
+  .w-\[620px\],
+  .w-\[700px\],
+  .w-\[794px\],
+  .w-\[800px\],
+  .w-\[860px\],
+  .w-\[900px\],
+  .w-\[1000px\],
+  .w-\[1100px\],
+  .w-\[1200px\],
+  .w-\[1280px\],
+  .w-\[1440px\],
+  .w-\[1800px\] {
+    width: 100% !important;
+  }
+
+
+  /* Wide minimum-width elements */
+
+  .min-w-\[1100px\] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+
+  /* Dashboard */
+
+  .dashboard-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dashboard-main table {
+    max-width: 100%;
+  }
+
+
+  /* Modals / dialogs */
+
+  [role="dialog"],
+  .modal,
+  .modal-content {
+    max-width: calc(100vw - 1rem) !important;
+  }
+
+
+  /* Full-width mobile sections */
+
+  .mobile-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+
+/* ==========================================================================
+   VERY SMALL PHONES
+   ========================================================================== */
+
+@media (max-width: 420px) {
+
+  .dashboard-main {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  h1 {
+    overflow-wrap: anywhere;
+  }
+}
+
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -49,23 +307,34 @@ body {
   }
 }
 
-/* Print rules: only the invoice printable area is shown when printing */
+
+/* ==========================================================================
+   PRINT
+   ========================================================================== */
+
 @media print {
+
   body * {
     visibility: hidden;
   }
+
   #invoice-printable,
   #invoice-printable * {
     visibility: visible;
   }
+
   #invoice-printable {
     position: absolute;
     inset: 0;
+
     width: 100%;
+
     margin: 0;
     padding: 24px;
+
     box-shadow: none !important;
   }
+
   .no-print {
     display: none !important;
   }

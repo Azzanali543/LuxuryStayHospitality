@@ -183,8 +183,8 @@ if (!formData.confirmPassword) {
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.4 }}
+         className="auth-card"
          style={{
-           display: "flex",
            width: "100%",
            maxWidth: "900px",
            borderRadius: "16px",
@@ -194,11 +194,9 @@ if (!formData.confirmPassword) {
        >
  
          {/* ── LEFT PANEL ── */}
-         <div style={{
+         <div className="auth-card-panel register hidden md:flex" style={{
            background: COLORS.PRIMARY,
-           width: "42%",
            padding: "48px 36px",
-           display: "flex",
            flexDirection: "column",
            justifyContent: "center",
          }}>
@@ -259,7 +257,7 @@ if (!formData.confirmPassword) {
            <form onSubmit={handleSubmit}>
  
              {/* First + Last name (two columns) */}
-             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "14px" }}>
+             <div className="register-name-grid" style={{ marginBottom: "14px" }}>
                <div>
                  <label style={labelStyle}>First name</label>
                  <input

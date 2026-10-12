@@ -24,7 +24,7 @@ const Invoice = ({ booking, onClose, autoDownload = false }) => {
     doc.text("INVOICE", margin, 40);
     doc.setFontSize(11);
     doc.setFont(undefined, "normal");
-    doc.text(booking?.hotelName || "Royal Palace Hotel & Resort", margin, 58);
+    doc.text(booking?.hotelName || "LuxuryStay", margin, 58);
 
     y = 100;
     doc.setTextColor(textPrimary);
@@ -71,13 +71,10 @@ const Invoice = ({ booking, onClose, autoDownload = false }) => {
     y += 30;
 
     // Itemized table
-    const rows = [
-      [`Room Charges (${booking?.roomType || ""})`, booking?.roomCharges],
-      ["Room Service", booking?.roomService],
-      ["Laundry Service", booking?.laundry],
-      ["Food & Beverages", booking?.food],
-      ["Airport Pickup", booking?.airportPickup],
-    ].filter((r) => r[1] !== undefined);
+    const rows =
+      Array.isArray(booking?.chargeLines) && booking.chargeLines.length
+        ? booking.chargeLines.map((line) => [line.label, line.amount])
+        : [];
 
     doc.setDrawColor(0, 0, 0);
     doc.setFillColor(245, 245, 245);
@@ -228,7 +225,7 @@ const Invoice = ({ booking, onClose, autoDownload = false }) => {
 
             <h1 className="text-base sm:text-xl font-bold">INVOICE</h1>
             <p className="text-xs sm:text-sm text-white/80">
-              {booking?.hotelName || "Royal Palace Hotel & Resort"}
+              {booking?.hotelName || "LuxuryStay"}
             </p>
           </div>
 
@@ -301,26 +298,28 @@ const Invoice = ({ booking, onClose, autoDownload = false }) => {
                 </thead>
 
                 <tbody>
-                  <tr style={{ borderBottom: "1px solid #000000" }}>
-                    <td className="p-2 sm:p-3">Room Charges ({booking?.roomType || ""})</td>
-                    <td className="p-2 sm:p-3 text-right">{booking?.roomCharges || "0"}</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #000000" }}>
-                    <td className="p-2 sm:p-3">Room Service</td>
-                    <td className="p-2 sm:p-3 text-right">{booking?.roomService || "0"}</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #000000" }}>
-                    <td className="p-2 sm:p-3">Laundry Service</td>
-                    <td className="p-2 sm:p-3 text-right">{booking?.laundry || "0"}</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #000000" }}>
-                    <td className="p-2 sm:p-3">Food & Beverages</td>
-                    <td className="p-2 sm:p-3 text-right">{booking?.food || "0"}</td>
-                  </tr>
-                  <tr>
-                    <td className="p-2 sm:p-3">Airport Pickup</td>
-                    <td className="p-2 sm:p-3 text-right">{booking?.airportPickup || "0"}</td>
-                  </tr>
+                  {Array.isArray(booking?.chargeLines) && booking.chargeLines.length ? (
+                    booking.chargeLines.map((line, index) => (
+                      <tr
+                        key={`${line.label}-${index}`}
+                        style={{
+                          borderBottom:
+                            index < booking.chargeLines.length - 1
+                              ? "1px solid #000000"
+                              : undefined,
+                        }}
+                      >
+                        <td className="p-2 sm:p-3">{line.label}</td>
+                        <td className="p-2 sm:p-3 text-right">{line.amount}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td className="p-2 sm:p-3" colSpan={2}>
+                        No line items
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

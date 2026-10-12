@@ -60,7 +60,7 @@ const SOCIAL_LINKS =[
 ]
 
 const LEGAL_LINKS = [
-  { label: "Privacy policy",  path: "/PrivacyPolicy" },
+  { label: "Privacy policy",  path: "/privacypolicy" },
   { label: "Terms of service", path: "/terms" },
   { label: "Cookie policy",   path: "/cookies" },
 ];
@@ -79,11 +79,8 @@ export default function Footer() {
 
       {/*  TOP SECTION*/}
       <div
+        className="footer-top-grid"
         style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr 1fr 1fr",
-
-          gap: "32px",
           paddingBottom: "32px",
           borderBottom: "0.5px solid rgba(243, 229, 216, 0.15)",
         }}
@@ -178,21 +175,45 @@ export default function Footer() {
           </p>
 
           {/*  hotel links */}
-          {HOTEL_LINKS.map((link) => (
-            <HashLink
-              key={link.path + link.label}
-              to={link.path}
-              style={{
-                display: "block",
-                fontSize: "12px",
-                color: "rgba(243, 229, 216, 0.65)",
-                marginBottom: "9px",
-                textDecoration: "none",
-              }}
-            >
-              {link.label}
-            </HashLink>
-          ))}
+          {HOTEL_LINKS.map((link) => {
+            const isExternal = link.path.startsWith("http");
+            const isHash = link.path.includes("#");
+            const linkStyle = {
+              display: "block",
+              fontSize: "12px",
+              color: "rgba(243, 229, 216, 0.65)",
+              marginBottom: "9px",
+              textDecoration: "none",
+            };
+
+            if (isExternal) {
+              return (
+                <a
+                  key={link.path + link.label}
+                  href={link.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={linkStyle}
+                >
+                  {link.label}
+                </a>
+              );
+            }
+
+            if (isHash) {
+              return (
+                <HashLink key={link.path + link.label} smooth to={link.path} style={linkStyle}>
+                  {link.label}
+                </HashLink>
+              );
+            }
+
+            return (
+              <Link key={link.path + link.label} to={link.path} style={linkStyle}>
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
 

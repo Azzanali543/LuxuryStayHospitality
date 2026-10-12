@@ -172,156 +172,307 @@ export default function GalleryPage() {
     <div
       className="min-h-screen"
       style={{ fontFamily: FONTS.BODY, background: COLORS.BACKGROUND }}
-    >
-      {/* Hero Section */}
-      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1600&q=80')`,
-            transform: "scale(1.05)",
-          }}
-        />
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: `
-              linear-gradient(135deg, rgba(31,26,23,0.92) 0%, rgba(31,26,23,0.6) 40%, rgba(31,26,23,0.3) 70%, rgba(31,26,23,0.1) 100%),
-              linear-gradient(to bottom, rgba(31,26,23,0.3) 0%, transparent 30%, transparent 70%, rgba(31,26,23,0.6) 100%)
-            `
-          }}
-        />
-        <div className="absolute top-0 left-0 w-1/3 h-px" style={{ background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)` }} />
-        <div className="absolute bottom-0 right-0 w-1/4 h-px" style={{ background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)` }} />
-        <div className="relative z-10 w-full container mx-auto px-6 md:px-12">
-          <div className="flex flex-col items-start max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="flex items-center gap-3 mb-6"
-            >
-              <span className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs uppercase tracking-[0.15em]"
-                style={{ 
-                  background: `rgba(212, 168, 130, 0.15)`,
-                  color: COLORS.ACCENT,
-                  fontFamily: FONTS.BODY,
-                  border: `1px solid rgba(212, 168, 130, 0.15)`,
-                  backdropFilter: "blur(10px)"
-                }}
-              >
-                <CameraIcon className="w-3.5 h-3.5" />
-                Visual Stories
-              </span>
-              <span className="w-px h-4" style={{ background: `rgba(248,246,243,0.2)` }} />
-              <span className="text-xs uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>
-                Gallery
-              </span>
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-light leading-[1.1] mb-4"
-              style={{ 
-                fontFamily: FONTS.HEADING,
-                color: COLORS.CREAM,
-                letterSpacing: "-0.03em"
-              }}
-            >
-              Our <br className="sm:hidden" />
-              <span style={{ color: COLORS.ACCENT }}>Gallery</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base md:text-lg font-light max-w-xl mb-8"
-              style={{ 
-                color: "rgba(248,246,243,0.75)",
-                fontFamily: FONTS.BODY,
-                lineHeight: 1.8
-              }}
-            >
-              Explore the elegance and beauty of LuxuryStay through our curated collection of spaces and moments.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-6 md:gap-10"
-            >
-              <div className="flex items-center gap-6 md:gap-8">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full"
-                    style={{ background: `rgba(212, 168, 130, 0.15)` }}
-                  >
-                    <PhotoIcon className="w-5 h-5" style={{ color: COLORS.ACCENT }} />
-                  </div>
-                  <div>
-                    <p className="text-xl font-light" style={{ color: COLORS.CREAM }}>
-                      {IMAGES.length}
-                    </p>
-                    <p className="text-[10px] uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>
-                      Photos
-                    </p>
-                  </div>
-                </div>
-                <div className="w-px h-10" style={{ background: "rgba(248,246,243,0.15)" }} />
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full"
-                    style={{ background: `rgba(212, 168, 130, 0.15)` }}
-                  >
-                    <SparklesIcon className="w-5 h-5" style={{ color: COLORS.ACCENT }} />
-                  </div>
-                  <div>
-                    <p className="text-xl font-light" style={{ color: COLORS.CREAM }}>
-                      {uniqueCategories.length}
-                    </p>
-                    <p className="text-[10px] uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>
-                      Categories
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="w-px h-8 hidden md:block" style={{ background: "rgba(248,246,243,0.15)" }} />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group flex items-center gap-2 px-5 py-2.5 text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300"
-                style={{
-                  color: COLORS.CREAM,
-                  border: `1px solid rgba(248,246,243,0.2)`,
-                  borderRadius: "100px",
-                  background: "rgba(248,246,243,0.05)",
-                  fontFamily: FONTS.BODY,
-                  backdropFilter: "blur(10px)"
-                }}
-                onClick={() => document.getElementById('gallery-grid')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Explore Gallery
-                <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </motion.button>
-            </motion.div>
-          </div>
-        </div>
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
+    >{/* Hero Section */}
+<section className="relative min-h-[58vh] md:min-h-[68vh] flex items-center overflow-hidden">
+
+  {/* Background */}
+  <div
+    className="absolute inset-0 bg-cover bg-center"
+    style={{
+      backgroundImage: `url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=2000&q=85')`,
+    }}
+  />
+
+  {/* Overlay */}
+  <div
+    className="absolute inset-0"
+    style={{
+      background: `
+        linear-gradient(
+          90deg,
+          rgba(31,26,23,0.88) 0%,
+          rgba(31,26,23,0.66) 32%,
+          rgba(31,26,23,0.30) 68%,
+          rgba(31,26,23,0.12) 100%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(31,26,23,0.18) 0%,
+          transparent 42%,
+          rgba(31,26,23,0.55) 100%
+        )
+      `,
+    }}
+  />
+
+  {/* Glow */}
+  <div
+    className="absolute inset-0"
+    style={{
+      background:
+        "radial-gradient(circle at 70% 45%, rgba(255,255,255,0.07), transparent 35%)",
+    }}
+  />
+
+  {/* Decorative Lines */}
+  <div
+    className="absolute top-0 left-0 w-1/3 h-px"
+    style={{
+      background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)`,
+    }}
+  />
+
+  <div
+    className="absolute bottom-0 right-0 w-1/3 h-px"
+    style={{
+      background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)`,
+    }}
+  />
+
+  {/* Content */}
+  <div className="relative z-10 w-full">
+    <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16">
+
+      <div className="max-w-2xl py-10 md:py-12">
+
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "rgba(248,246,243,0.3)" }}>
-            Scroll
-          </span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8"
-            style={{ background: `linear-gradient(to bottom, ${COLORS.ACCENT}, transparent)` }}
-          />
+          <div
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full"
+            style={{
+              background: "rgba(212,168,130,0.13)",
+              border: "1px solid rgba(212,168,130,0.22)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <span
+              className="w-4 h-px"
+              style={{ background: COLORS.ACCENT }}
+            />
+
+            <span
+              className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em]"
+              style={{
+                color: COLORS.ACCENT,
+                fontFamily: FONTS.BODY,
+              }}
+            >
+              Visual Stories
+            </span>
+
+            <span
+              className="w-4 h-px"
+              style={{ background: COLORS.ACCENT }}
+            />
+          </div>
         </motion.div>
-      </section>
+
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="
+            mt-4
+            text-[38px]
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
+            font-light
+            leading-[1.05]
+          "
+          style={{
+            fontFamily: FONTS.HEADING,
+            color: COLORS.CREAM,
+            letterSpacing: "-0.035em",
+            textShadow: "0 3px 25px rgba(0,0,0,0.25)",
+          }}
+        >
+          Our Gallery.
+          <br />
+          <span style={{ color: COLORS.ACCENT }}>
+            Moments to Remember.
+          </span>
+        </motion.h1>
+
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="
+            mt-4
+            max-w-xl
+            text-sm
+            sm:text-base
+            md:text-lg
+            font-light
+            leading-[1.65]
+          "
+          style={{
+            color: "rgba(248,246,243,0.84)",
+          }}
+        >
+          Explore the elegance and beauty of LuxuryStay through our curated
+          collection of spaces and unforgettable moments.
+        </motion.p>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-6 flex items-center gap-6 sm:gap-8"
+        >
+
+          {/* Photos */}
+          <div>
+            <p
+              className="text-2xl sm:text-3xl font-light"
+              style={{ color: COLORS.CREAM }}
+            >
+              {IMAGES.length}
+            </p>
+
+            <p
+              className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+              style={{ color: "rgba(248,246,243,0.48)" }}
+            >
+              Photos
+            </p>
+          </div>
+
+          <div
+            className="h-9 w-px"
+            style={{
+              background: "rgba(248,246,243,0.18)",
+            }}
+          />
+
+          {/* Categories */}
+          <div>
+            <p
+              className="text-2xl sm:text-3xl font-light"
+              style={{ color: COLORS.CREAM }}
+            >
+              {uniqueCategories.length}
+            </p>
+
+            <p
+              className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+              style={{ color: "rgba(248,246,243,0.48)" }}
+            >
+              Categories
+            </p>
+          </div>
+
+        </motion.div>
+
+        {/* Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-6"
+        >
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="
+              group
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+              px-6
+              py-3
+              rounded-full
+              text-sm
+              transition-all
+              duration-300
+            "
+            style={{
+              color: COLORS.CREAM,
+              border: "1px solid rgba(248,246,243,0.25)",
+              background: "rgba(248,246,243,0.05)",
+              backdropFilter: "blur(10px)",
+              fontFamily: FONTS.BODY,
+            }}
+            onClick={() =>
+              document
+                .getElementById("gallery-grid")
+                ?.scrollIntoView({
+                  behavior: "smooth",
+                })
+            }
+          >
+            Explore Gallery
+
+            <ArrowUpRightIcon
+              className="
+                w-4 h-4
+                transition-transform
+                duration-300
+                group-hover:translate-x-0.5
+                group-hover:-translate-y-0.5
+              "
+            />
+          </motion.button>
+        </motion.div>
+
+      </div>
+    </div>
+  </div>
+
+  {/* Scroll Indicator */}
+  <motion.div
+    className="
+      absolute
+      bottom-5
+      left-1/2
+      -translate-x-1/2
+      hidden
+      md:flex
+      flex-col
+      items-center
+      gap-2
+    "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.8 }}
+  >
+    <span
+      className="text-[10px] uppercase tracking-[0.2em]"
+      style={{
+        color: "rgba(248,246,243,0.32)",
+      }}
+    >
+      Scroll
+    </span>
+
+    <motion.div
+      animate={{ y: [0, 8, 0] }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+      className="w-px h-7"
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${COLORS.ACCENT},
+          transparent
+        )`,
+      }}
+    />
+  </motion.div>
+
+</section>
 
       {/* Filter Chips */}
       <motion.div

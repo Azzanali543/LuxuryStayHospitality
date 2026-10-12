@@ -1,13 +1,23 @@
-// MongoDB connection
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
+  const uri = process.env.MONGO_URI;
+
+  if (!uri) {
+    console.error("MongoDB Connection Error: MONGO_URI is missing from Server/.env");
+    process.exit(1);
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    const conn = await mongoose.connect(uri, {
+      family: 4,
+      serverSelectionTimeoutMS: 10000,
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}/${conn.connection.name}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
-    process.exit(1);
+    console.error("Make sure MongoDB is running and MONGO_URI in Server/.env is correct.");
+    throw error;
   }
 };
 

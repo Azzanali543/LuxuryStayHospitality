@@ -124,152 +124,332 @@ export default function AboutUsPage() {
       className="overflow-x-hidden"
       style={{ fontFamily: FONTS.BODY, background: COLORS.BACKGROUND, color: COLORS.TEXT_PRIMARY }}
     >
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80')`,
-            transform: "scale(1.05)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              linear-gradient(135deg, rgba(31,26,23,0.95) 0%, rgba(31,26,23,0.7) 40%, rgba(31,26,23,0.4) 70%, rgba(31,26,23,0.15) 100%),
-              linear-gradient(to bottom, rgba(31,26,23,0.3) 0%, transparent 30%, transparent 60%, rgba(31,26,23,0.6) 100%)
-            `
-          }}
-        />
-        
-        <div className="absolute top-0 left-0 w-2/5 h-px" style={{ background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)` }} />
-        <div className="absolute bottom-0 right-0 w-1/4 h-px" style={{ background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)` }} />
+{/* About Hero Section */}
+<section className="relative min-h-[78vh] md:min-h-[82vh] flex items-center overflow-hidden">
 
-        <div className="relative z-[1] w-full container mx-auto px-6 md:px-12">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <p
-                className="inline-flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-[0.15em] rounded-full"
-                style={{
-                  color: COLORS.ACCENT,
-                  fontFamily: FONTS.BODY,
-                  background: `rgba(212, 168, 130, 0.15)`,
-                  border: `1px solid rgba(212, 168, 130, 0.2)`,
-                  backdropFilter: "blur(10px)"
-                }}
-              >
-                <span className="h-px w-4" style={sectionLine} />
-                Our Story
-                <span className="h-px w-4" style={sectionLine} />
-              </p>
-            </motion.div>
+  {/* Background */}
+  <div
+    className="absolute inset-0 bg-cover bg-center"
+    style={{
+      backgroundImage: `url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2000&q=85')`,
+    }}
+  />
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 mb-4 text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1]"
-              style={{ 
-                fontFamily: FONTS.HEADING, 
-                color: COLORS.CREAM,
-                letterSpacing: "-0.03em",
-                textShadow: "0 2px 20px rgba(0,0,0,0.2)"
-              }}
-            >
-              Three Decades of<br />
-              <span style={{ color: COLORS.ACCENT }}>Quiet Excellence</span>
-            </motion.h1>
+  {/* Soft luxury overlay */}
+  <div
+    className="absolute inset-0"
+    style={{
+      background: `
+        linear-gradient(
+          90deg,
+          rgba(31,26,23,0.88) 0%,
+          rgba(31,26,23,0.66) 32%,
+          rgba(31,26,23,0.30) 68%,
+          rgba(31,26,23,0.12) 100%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(31,26,23,0.18) 0%,
+          transparent 42%,
+          rgba(31,26,23,0.55) 100%
+        )
+      `,
+    }}
+  />
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="max-w-xl text-base md:text-lg font-light leading-[1.8]"
-              style={{ 
-                color: "rgba(248,246,243,0.85)",
-                textShadow: "0 1px 12px rgba(0,0,0,0.15)"
-              }}
-            >
-              LuxuryStay was built on a simple belief: true luxury isn't about
-              grandeur, it's about being truly seen and cared for.
-            </motion.p>
+  {/* Subtle image glow */}
+  <div
+    className="absolute inset-0"
+    style={{
+      background:
+        "radial-gradient(circle at 70% 45%, rgba(255,255,255,0.07), transparent 35%)",
+    }}
+  />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 flex flex-wrap items-center gap-6"
-            >
-              <div className="flex items-center gap-6">
-                <div>
-                  <p className="text-2xl font-light" style={{ color: COLORS.CREAM }}>30+</p>
-                  <p className="text-xs uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>Years</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "rgba(248,246,243,0.15)" }} />
-                <div>
-                  <p className="text-2xl font-light" style={{ color: COLORS.CREAM }}>50k+</p>
-                  <p className="text-xs uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>Guests</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "rgba(248,246,243,0.15)" }} />
-                <div>
-                  <p className="text-2xl font-light" style={{ color: COLORS.ACCENT }}>4.9★</p>
-                  <p className="text-xs uppercase tracking-[0.15em]" style={{ color: "rgba(248,246,243,0.5)" }}>Rating</p>
-                </div>
-              </div>
-            </motion.div>
+  {/* Decorative lines */}
+  <div
+    className="absolute top-0 left-0 w-1/3 h-px"
+    style={{
+      background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)`,
+    }}
+  />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="mt-8 flex flex-wrap gap-4"
-            >
-              <HashLink 
-                to="#values" 
-                className={`${btnPrimaryClass}`} 
-                style={btnPrimary}
-                smooth
-              >
-                Discover Our Values
-                <ArrowRightIcon className="w-4 h-4" />
-              </HashLink>
-              <Link
-                to="/rooms"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-full transition-all duration-300 hover:bg-white/10"
-                style={{
-                  color: COLORS.CREAM,
-                  border: `1px solid rgba(248,246,243,0.2)`,
-                }}
-              >
-                <PlayIcon className="w-4 h-4" />
-                Explore Rooms
-              </Link>
-            </motion.div>
-          </div>
-        </div>
+  <div
+    className="absolute bottom-0 right-0 w-1/3 h-px"
+    style={{
+      background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)`,
+    }}
+  />
 
+  {/* Content */}
+  <div className="relative z-10 w-full">
+    <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16">
+
+      <div className="max-w-2xl pt-16 pb-20 md:pt-20 md:pb-24">
+
+        {/* Eyebrow */}
         <motion.div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "rgba(248,246,243,0.2)" }}>
-            Scroll
-          </span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8"
-            style={{ background: `linear-gradient(to bottom, ${COLORS.ACCENT}, transparent)` }}
-          />
+          <div
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full"
+            style={{
+              background: "rgba(212,168,130,0.13)",
+              border: "1px solid rgba(212,168,130,0.22)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <span
+              className="w-4 h-px"
+              style={{ background: COLORS.ACCENT }}
+            />
+
+            <span
+              className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em]"
+              style={{
+                color: COLORS.ACCENT,
+                fontFamily: FONTS.BODY,
+              }}
+            >
+              Our Story
+            </span>
+
+            <span
+              className="w-4 h-px"
+              style={{ background: COLORS.ACCENT }}
+            />
+          </div>
         </motion.div>
-      </section>
+
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="
+            mt-6
+            text-[42px]
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
+            font-light
+            leading-[1.08]
+          "
+          style={{
+            fontFamily: FONTS.HEADING,
+            color: COLORS.CREAM,
+            letterSpacing: "-0.035em",
+            textShadow: "0 3px 25px rgba(0,0,0,0.25)",
+          }}
+        >
+          More Than a Stay.
+          <br />
+          <span style={{ color: COLORS.ACCENT }}>
+            A Story of Hospitality.
+          </span>
+        </motion.h1>
+
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="
+            mt-6
+            max-w-xl
+            text-sm
+            sm:text-base
+            md:text-lg
+            font-light
+            leading-[1.8]
+          "
+          style={{
+            color: "rgba(248,246,243,0.84)",
+            textShadow: "0 2px 14px rgba(0,0,0,0.2)",
+          }}
+        >
+          For over three decades, LuxuryStay has created places where
+          thoughtful design, genuine care, and timeless hospitality come
+          together to make every stay memorable.
+        </motion.p>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-8 flex items-center gap-5 sm:gap-7"
+        >
+
+          <div>
+            <p
+              className="text-2xl sm:text-3xl font-light"
+              style={{ color: COLORS.CREAM }}
+            >
+              30+
+            </p>
+
+            <p
+              className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+              style={{ color: "rgba(248,246,243,0.48)" }}
+            >
+              Years
+            </p>
+          </div>
+
+          <div
+            className="h-10 w-px"
+            style={{
+              background: "rgba(248,246,243,0.18)",
+            }}
+          />
+
+          <div>
+            <p
+              className="text-2xl sm:text-3xl font-light"
+              style={{ color: COLORS.CREAM }}
+            >
+              50k+
+            </p>
+
+            <p
+              className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+              style={{ color: "rgba(248,246,243,0.48)" }}
+            >
+              Guests
+            </p>
+          </div>
+
+          <div
+            className="h-10 w-px"
+            style={{
+              background: "rgba(248,246,243,0.18)",
+            }}
+          />
+
+          <div>
+            <p
+              className="text-2xl sm:text-3xl font-light"
+              style={{ color: COLORS.ACCENT }}
+            >
+              4.9★
+            </p>
+
+            <p
+              className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+              style={{ color: "rgba(248,246,243,0.48)" }}
+            >
+              Rating
+            </p>
+          </div>
+
+        </motion.div>
+
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="
+            mt-8
+            flex
+            flex-col
+            sm:flex-row
+            gap-3
+          "
+        >
+
+          <HashLink
+            to="#values"
+            smooth
+            className={btnPrimaryClass}
+            style={{
+              ...btnPrimary,
+              justifyContent: "center",
+            }}
+          >
+            Discover Our Values
+            <ArrowRightIcon className="w-4 h-4" />
+          </HashLink>
+
+          <Link
+            to="/rooms"
+            className="
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+              px-6
+              py-3
+              rounded-full
+              text-sm
+              transition-all
+              duration-300
+              hover:bg-white/10
+            "
+            style={{
+              color: COLORS.CREAM,
+              border: "1px solid rgba(248,246,243,0.25)",
+            }}
+          >
+            <PlayIcon className="w-4 h-4" />
+            Explore Rooms
+          </Link>
+
+        </motion.div>
+
+      </div>
+    </div>
+  </div>
+
+  {/* Scroll indicator */}
+  <motion.div
+    className="
+      absolute
+      bottom-6
+      left-1/2
+      -translate-x-1/2
+      hidden
+      md:flex
+      flex-col
+      items-center
+      gap-2
+    "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.8 }}
+  >
+    <span
+      className="text-[10px] uppercase tracking-[0.2em]"
+      style={{
+        color: "rgba(248,246,243,0.32)",
+      }}
+    >
+      Scroll
+    </span>
+
+    <motion.div
+      animate={{ y: [0, 8, 0] }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+      className="w-px h-8"
+      style={{
+        background: `linear-gradient(
+          to bottom,
+          ${COLORS.ACCENT},
+          transparent
+        )`,
+      }}
+    />
+  </motion.div>
+
+</section>
+
 
       {/* Our Story Section */}
       <section className="px-4 py-16 md:py-24 sm:px-8 md:px-12 lg:px-[60px]">

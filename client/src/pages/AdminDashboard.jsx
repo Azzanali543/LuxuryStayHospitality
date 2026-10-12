@@ -168,7 +168,7 @@ function AdminDashboard() {
         <AsideBar />
         {/* aside end */}
 
-        <main className="flex-1 p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 w-full min-w-0">
+        <main className="flex-1 p-3 pt-16 sm:p-6 lg:p-8 lg:pt-8 space-y-4 sm:space-y-6 w-full min-w-0">
           {/* Header */}
 
           <div

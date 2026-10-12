@@ -128,8 +128,8 @@ try {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
+        className="auth-card"
         style={{
-          display: "flex",
           width: "100%",
           maxWidth: "860px",
           borderRadius: "16px",
@@ -139,11 +139,9 @@ try {
       >
 
         {/* ── LEFT PANEL (Burgundy) ── */}
-        <div style={{
+        <div className="auth-card-panel hidden md:flex" style={{
           background: COLORS.PRIMARY,
-          width: "45%",
           padding: "48px 36px",
-          display: "flex",
           flexDirection: "column",
           justifyContent: "center",
         }}>

@@ -165,7 +165,7 @@ export default function ContactPage() {
       style={{
         minHeight: "100vh",
         background: COLORS.BACKGROUND,
-        padding: "60px 24px",
+        padding: "32px 16px",
         fontFamily: FONTS.BODY,
       }}
     >
@@ -225,9 +225,8 @@ export default function ContactPage() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
+        className="contact-main-grid"
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1.4fr",
           maxWidth: "1050px",
           margin: "0 auto",
           borderRadius: BORDER_RADIUS.LARGE,
@@ -569,10 +568,8 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit}>
                 {/* First + Last name */}
                 <div
+                  className="contact-name-grid"
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "14px",
                     marginBottom: "16px",
                   }}
                 >

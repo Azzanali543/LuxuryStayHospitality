@@ -5,26 +5,32 @@ const SpecialRequests = ({ specialRequests }) => {
   const text = (specialRequests || "").trim();
 
   return (
-    <div className="w-full mt-3">
+    <div className="mt-3 w-full">
       <div
-        className="rounded-3xl border shadow-md p-6 sm:p-8"
+        className="rounded-3xl border p-6 shadow-lg transition-all duration-300"
         style={{
           backgroundColor: COLORS.SURFACE,
           borderColor: COLORS.BORDER,
         }}
       >
-        <h2 className="text-2xl font-bold" style={{ color: COLORS.PRIMARY }}>
+        <h2
+          className="text-xl font-semibold tracking-wide"
+          style={{ color: COLORS.TEXT_PRIMARY }}
+        >
           Special Requests
         </h2>
 
-        <p className="mt-2 text-sm leading-6" style={{ color: COLORS.TEXT_SECONDARY }}>
+        <p
+          className="mt-2 text-sm leading-6"
+          style={{ color: COLORS.TEXT_SECONDARY }}
+        >
           Requests submitted when you confirmed this booking.
         </p>
 
         <div
-          className="mt-6 rounded-xl p-4 text-sm min-h-[100px] whitespace-pre-wrap"
+          className="mt-5 rounded-2xl border p-5 text-sm leading-7 whitespace-pre-wrap transition-all duration-300"
           style={{
-            border: `1px solid ${COLORS.BORDER}`,
+            borderColor: COLORS.BORDER,
             color: COLORS.TEXT_PRIMARY,
             backgroundColor: COLORS.BACKGROUND,
           }}

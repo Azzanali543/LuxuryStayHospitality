@@ -166,18 +166,24 @@ function RoomsPage() {
           minHeight: "100vh",
           display: "flex",
           background: COLORS.BACKGROUND,
+          fontFamily: FONTS.BODY,
         }}
       >
         <AsideBar />
-        <main className="flex-1 p-6">
+
+        <main className="flex-1 min-w-0 overflow-hidden p-4 md:p-5 lg:p-6">
           <div className="flex items-center justify-center min-h-[80vh]">
             <div className="text-center">
               <div
-                className="w-16 h-16 border-4 border-t-transparent rounded-full animate-spin mx-auto"
-                style={{ borderColor: COLORS.ACCENT, borderTopColor: "transparent" }}
+                className="w-14 h-14 border-4 rounded-full animate-spin mx-auto"
+                style={{
+                  borderColor: COLORS.ACCENT,
+                  borderTopColor: "transparent",
+                }}
               />
+
               <p
-                className="text-xl mt-4"
+                className="text-lg mt-4"
                 style={{
                   color: COLORS.TEXT_SECONDARY,
                 }}
@@ -202,38 +208,38 @@ function RoomsPage() {
     >
       <AsideBar />
 
-      <main className="flex-1 p-6">
+      <main className="flex-1 min-w-0 overflow-hidden p-4 md:p-5 lg:p-6">
         {/* =========================
             HEADER
         ========================= */}
         <div
-          className="p-8 mb-8"
+          className="p-5 md:p-6 mb-6"
           style={{
             background: `linear-gradient(135deg, ${COLORS.PRIMARY}, #3B2D25)`,
             borderRadius: BORDER_RADIUS.LARGE,
             boxShadow: SHADOWS.CARD,
           }}
         >
-          <div className="flex justify-between items-center flex-wrap gap-5">
-            <div className="flex items-center gap-4">
+          <div className="flex justify-between items-center flex-wrap gap-4">
+            <div className="flex items-center gap-3 min-w-0">
               <div
-                className="p-4"
+                className="p-3 flex-shrink-0"
                 style={{
                   background: COLORS.ACCENT,
                   borderRadius: BORDER_RADIUS.LARGE,
                 }}
               >
                 <BedDouble
-                  size={35}
+                  size={30}
                   style={{
                     color: COLORS.PRIMARY,
                   }}
                 />
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h1
-                  className="text-4xl font-bold text-white"
+                  className="text-2xl md:text-3xl font-bold text-white"
                   style={{
                     fontFamily: FONTS.HEADING,
                   }}
@@ -242,7 +248,7 @@ function RoomsPage() {
                 </h1>
 
                 <p
-                  className="mt-2"
+                  className="mt-1 text-sm md:text-base"
                   style={{
                     color: COLORS.ACCENT,
                   }}
@@ -254,12 +260,12 @@ function RoomsPage() {
 
             <Link
               to="/admin/rooms/newroom"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 flex-shrink-0"
               style={{
                 background: COLORS.ACCENT,
                 color: COLORS.PRIMARY,
                 fontWeight: 600,
-                padding: "12px 20px",
+                padding: "10px 16px",
                 borderRadius: BORDER_RADIUS.MEDIUM,
                 textDecoration: "none",
                 boxShadow: SHADOWS.DROPDOWN,
@@ -275,18 +281,21 @@ function RoomsPage() {
             SEARCH AND FILTER
         ========================= */}
         <div
-          className="p-6 mb-8 flex flex-col md:flex-row justify-between gap-4"
+          className="p-4 md:p-5 mb-6 flex flex-col sm:flex-row justify-between gap-3"
           style={{
             background: COLORS.SURFACE,
             borderRadius: BORDER_RADIUS.LARGE,
             boxShadow: SHADOWS.CARD,
+            border: `1px solid ${COLORS.BORDER}`,
           }}
         >
-          <div className="relative w-full md:w-80">
+          <div className="relative w-full sm:max-w-md">
             <Search
               size={18}
-              className="absolute left-3 top-3.5"
-              style={{ color: COLORS.TEXT_SECONDARY }}
+              className="absolute left-3 top-1/2 -translate-y-1/2"
+              style={{
+                color: COLORS.TEXT_SECONDARY,
+              }}
             />
 
             <input
@@ -296,7 +305,7 @@ function RoomsPage() {
               onChange={(e) =>
                 setSearch(e.target.value)
               }
-              className="w-full pl-10 pr-4 py-3 outline-none"
+              className="w-full pl-10 pr-4 py-2.5 outline-none text-sm"
               style={{
                 border: `1px solid ${COLORS.BORDER}`,
                 borderRadius: BORDER_RADIUS.MEDIUM,
@@ -312,7 +321,7 @@ function RoomsPage() {
             onChange={(e) =>
               setFilter(e.target.value)
             }
-            className="px-4 py-3 outline-none"
+            className="w-full sm:w-48 px-4 py-2.5 outline-none text-sm"
             style={{
               border: `1px solid ${COLORS.BORDER}`,
               borderRadius: BORDER_RADIUS.MEDIUM,
@@ -334,7 +343,7 @@ function RoomsPage() {
         {/* =========================
             STATISTICS
         ========================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
           {[
             {
               label: "Total Rooms",
@@ -371,18 +380,18 @@ function RoomsPage() {
           ].map((item) => (
             <div
               key={item.label}
+              className="p-4 md:p-5"
               style={{
                 background: `${item.color}22`,
                 border: `1px solid ${item.color}55`,
                 borderRadius: BORDER_RADIUS.LARGE,
-                padding: "22px",
                 textAlign: "center",
                 boxShadow: SHADOWS.CARD,
               }}
             >
               <h1
+                className="text-2xl md:text-3xl"
                 style={{
-                  fontSize: "34px",
                   color: item.color,
                   fontWeight: 700,
                   fontFamily: FONTS.HEADING,
@@ -392,8 +401,8 @@ function RoomsPage() {
               </h1>
 
               <p
+                className="mt-1 text-sm"
                 style={{
-                  marginTop: "6px",
                   color: COLORS.TEXT_SECONDARY,
                   fontWeight: 500,
                 }}
@@ -408,7 +417,7 @@ function RoomsPage() {
             ROOMS TABLE
         ========================= */}
         <div
-          className="mt-8 overflow-x-auto"
+          className="w-full overflow-hidden"
           style={{
             background: COLORS.SURFACE,
             borderRadius: BORDER_RADIUS.LARGE,
@@ -416,227 +425,238 @@ function RoomsPage() {
             border: `1px solid ${COLORS.BORDER}`,
           }}
         >
-          <table className="w-full border-collapse min-w-[1100px]">
-            <thead
-              style={{
-                background: `linear-gradient(135deg, ${COLORS.PRIMARY}, #3B2D25)`,
-              }}
-            >
-              <tr>
-                {[
-                  "Room",
-                  "Type",
-                  "Image",
-                  "Floor",
-                  "Area",
-                  "Persons",
-                  "Price / Night",
-                  "Status",
-                  "Actions",
-                ].map((heading) => (
-                  <th
-                    key={heading}
-                    className="text-center py-4 px-6"
-                    style={{
-                      color: COLORS.ACCENT,
-                      fontFamily: FONTS.HEADING,
-                      fontSize: "15px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {heading}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {filteredRooms.length === 0 ? (
+          {/* Only the table can scroll horizontally if the
+              available screen width is genuinely too small */}
+          <div className="w-full overflow-x-auto">
+            <table className="w-full min-w-[950px] border-collapse">
+              <thead
+                style={{
+                  background: `linear-gradient(135deg, ${COLORS.PRIMARY}, #3B2D25)`,
+                }}
+              >
                 <tr>
-                  <td
-                    colSpan="9"
-                    className="text-center py-10"
-                    style={{
-                      color: COLORS.TEXT_SECONDARY,
-                    }}
-                  >
-                    No rooms found.
-                  </td>
-                </tr>
-              ) : (
-                filteredRooms.map((room, index) => {
-                  const statusStyle =
-                    getStatusStyle(room.status);
-
-                  return (
-                    <tr
-                      key={room._id}
-                      className="transition-all duration-200 hover:bg-amber-50"
+                  {[
+                    "Room",
+                    "Type",
+                    "Image",
+                    "Floor",
+                    "Area",
+                    "Persons",
+                    "Price / Night",
+                    "Status",
+                    "Actions",
+                  ].map((heading) => (
+                    <th
+                      key={heading}
+                      className="text-center py-3 px-3 whitespace-nowrap"
                       style={{
-                        background:
-                          index % 2 === 0
-                            ? "#FFFFFF"
-                            : "#FCFAF7",
-                        borderBottom:
-                          `1px solid ${COLORS.BORDER}`,
+                        color: COLORS.ACCENT,
+                        fontFamily: FONTS.HEADING,
+                        fontSize: "14px",
+                        fontWeight: 700,
                       }}
                     >
-                      <td
-                        className="py-5 px-6 text-center font-semibold"
+                      {heading}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredRooms.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="9"
+                      className="text-center py-10"
+                      style={{
+                        color: COLORS.TEXT_SECONDARY,
+                      }}
+                    >
+                      No rooms found.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredRooms.map((room, index) => {
+                    const statusStyle =
+                      getStatusStyle(room.status);
+
+                    return (
+                      <tr
+                        key={room._id}
+                        className="transition-all duration-200 hover:bg-amber-50"
                         style={{
-                          color: COLORS.TEXT_PRIMARY,
+                          background:
+                            index % 2 === 0
+                              ? "#FFFFFF"
+                              : "#FCFAF7",
+                          borderBottom:
+                            `1px solid ${COLORS.BORDER}`,
                         }}
                       >
-                        #{room.roomNumber}
-                      </td>
-
-                      <td
-                        className="py-5 px-6 text-center"
-                        style={{
-                          color: COLORS.TEXT_SECONDARY,
-                        }}
-                      >
-                        {room.type || "-"}
-                      </td>
-
-                      <td className="py-5 px-6 text-center">
-                        <img
-                          src={
-                            room.image ||
-                            "/rooms/default-room.jpg"
-                          }
-                          alt={
-                            room.type ||
-                            "Hotel room"
-                          }
+                        <td
+                          className="py-4 px-3 text-center font-semibold whitespace-nowrap"
                           style={{
-                            width: "75px",
-                            height: "55px",
-                            objectFit: "cover",
-                            borderRadius:
-                              BORDER_RADIUS.MEDIUM,
-                            border:
-                              `2px solid ${COLORS.BORDER}`,
-                            boxShadow:
-                              SHADOWS.CARD,
-                            margin: "auto",
-                          }}
-                        />
-                      </td>
-
-                      <td
-                        className="py-5 px-6 text-center"
-                        style={{
-                          color: COLORS.TEXT_SECONDARY,
-                        }}
-                      >
-                        {room.floor || "-"}
-                      </td>
-
-                      <td
-                        className="py-5 px-6 text-center"
-                        style={{
-                          color: COLORS.TEXT_SECONDARY,
-                        }}
-                      >
-                        {room.area || "-"}
-                      </td>
-
-                      <td
-                        className="py-5 px-6 text-center"
-                        style={{
-                          color: COLORS.TEXT_SECONDARY,
-                        }}
-                      >
-                        {room.guests || "-"}
-                      </td>
-
-                      <td
-                        className="py-5 px-6 text-center font-semibold"
-                        style={{
-                          color: COLORS.TEXT_PRIMARY,
-                        }}
-                      >
-                        PKR {room.price || "-"}
-                      </td>
-
-                      <td className="py-5 px-6 text-center">
-                        <span
-                          className="px-4 py-2 rounded-full text-sm font-semibold"
-                          style={{
-                            background:
-                              statusStyle.background,
-                            color:
-                              statusStyle.color,
+                            color: COLORS.TEXT_PRIMARY,
                           }}
                         >
-                          {room.status || "Unknown"}
-                        </span>
-                      </td>
+                          #{room.roomNumber}
+                        </td>
 
-                      <td className="py-5 px-6">
-                        <div className="flex justify-center gap-3">
-                          {/* EDIT */}
-                          <Link
-                            to={`/admin/rooms/edit/${room._id}`}
-                            className="flex items-center gap-2 text-white px-4 py-2 transition-all duration-200 hover:scale-105"
+                        <td
+                          className="py-4 px-3 text-center whitespace-nowrap"
+                          style={{
+                            color: COLORS.TEXT_SECONDARY,
+                          }}
+                        >
+                          {room.type || "-"}
+                        </td>
+
+                        <td className="py-4 px-3 text-center">
+                          <img
+                            src={
+                              room.image ||
+                              "/rooms/default-room.jpg"
+                            }
+                            alt={
+                              room.type ||
+                              "Hotel room"
+                            }
                             style={{
-                              background: COLORS.PRIMARY,
+                              width: "65px",
+                              height: "48px",
+                              objectFit: "cover",
                               borderRadius:
                                 BORDER_RADIUS.MEDIUM,
-                              textDecoration: "none",
+                              border:
+                                `2px solid ${COLORS.BORDER}`,
+                              boxShadow:
+                                SHADOWS.CARD,
+                              margin: "auto",
                             }}
-                          >
-                            <Edit size={16} />
-                            Edit
-                          </Link>
+                          />
+                        </td>
 
-                          {/* DELETE */}
-                          <button
-                            onClick={() =>
-                              handleDelete(room._id)
-                            }
-                            disabled={
-                              deletingId === room._id
-                            }
-                            className="flex items-center gap-2 text-white px-4 py-2 transition-all duration-200 hover:scale-105 disabled:opacity-50"
+                        <td
+                          className="py-4 px-3 text-center whitespace-nowrap"
+                          style={{
+                            color: COLORS.TEXT_SECONDARY,
+                          }}
+                        >
+                          {room.floor || "-"}
+                        </td>
+
+                        <td
+                          className="py-4 px-3 text-center whitespace-nowrap"
+                          style={{
+                            color: COLORS.TEXT_SECONDARY,
+                          }}
+                        >
+                          {room.area || "-"}
+                        </td>
+
+                        <td
+                          className="py-4 px-3 text-center whitespace-nowrap"
+                          style={{
+                            color: COLORS.TEXT_SECONDARY,
+                          }}
+                        >
+                          {room.guests || "-"}
+                        </td>
+
+                        <td
+                          className="py-4 px-3 text-center font-semibold whitespace-nowrap"
+                          style={{
+                            color: COLORS.TEXT_PRIMARY,
+                          }}
+                        >
+                          PKR {room.price || "-"}
+                        </td>
+
+                        <td className="py-4 px-3 text-center">
+                          <span
+                            className="inline-block px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
                             style={{
-                              background: COLORS.ERROR,
-                              borderRadius:
-                                BORDER_RADIUS.MEDIUM,
+                              background:
+                                statusStyle.background,
+                              color:
+                                statusStyle.color,
                             }}
                           >
-                            <Trash2 size={16} />
+                            {room.status || "Unknown"}
+                          </span>
+                        </td>
 
-                            {deletingId === room._id
-                              ? "Deleting..."
-                              : "Delete"}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                        <td className="py-4 px-3">
+                          <div className="flex justify-center gap-2">
+                            {/* EDIT */}
+                            <Link
+                              to={`/admin/rooms/edit/${room._id}`}
+                              className="flex items-center gap-1.5 text-white px-3 py-2 text-sm transition-all duration-200 hover:scale-105 whitespace-nowrap"
+                              style={{
+                                background:
+                                  COLORS.PRIMARY,
+                                borderRadius:
+                                  BORDER_RADIUS.MEDIUM,
+                                textDecoration: "none",
+                              }}
+                            >
+                              <Edit size={15} />
+                              Edit
+                            </Link>
 
-          {/* Footer */}
-          {!loading && rooms.length > 0 && (
+                            {/* DELETE */}
+                            <button
+                              onClick={() =>
+                                handleDelete(room._id)
+                              }
+                              disabled={
+                                deletingId === room._id
+                              }
+                              className="flex items-center gap-1.5 text-white px-3 py-2 text-sm transition-all duration-200 hover:scale-105 disabled:opacity-50 whitespace-nowrap"
+                              style={{
+                                background:
+                                  COLORS.ERROR,
+                                borderRadius:
+                                  BORDER_RADIUS.MEDIUM,
+                              }}
+                            >
+                              <Trash2 size={15} />
+
+                              {deletingId === room._id
+                                ? "Deleting..."
+                                : "Delete"}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* =========================
+              FOOTER
+          ========================= */}
+          {rooms.length > 0 && (
             <div
+              className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 py-3"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "12px 16px",
-                borderTop: `0.5px solid ${COLORS.BORDER}`,
+                borderTop:
+                  `1px solid ${COLORS.BORDER}`,
                 fontSize: "12px",
                 color: COLORS.TEXT_SECONDARY,
-                flexWrap: "wrap",
-                gap: "8px",
               }}
             >
-              <span>Showing {filteredRooms.length} of {rooms.length} rooms</span>
-              <span>Total {rooms.length} rooms in inventory</span>
+              <span>
+                Showing {filteredRooms.length} of{" "}
+                {rooms.length} rooms
+              </span>
+
+              <span>
+                Total {rooms.length} rooms in inventory
+              </span>
             </div>
           )}
         </div>

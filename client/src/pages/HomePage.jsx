@@ -177,7 +177,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 mb-4 text-5xl md:text-6xl lg:text-7xl font-light leading-[1.15]"
+              className="mt-6 mb-4 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.15]"
               style={{
                 fontFamily: FONTS.HEADING,
                 color: COLORS.CREAM,

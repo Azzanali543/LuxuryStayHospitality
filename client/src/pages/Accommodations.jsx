@@ -53,7 +53,10 @@ export default function Accommodations() {
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredRoom, setHoveredRoom] = useState(null);
 
+  // ==========================================================================
   // LOAD ROOMS
+  // ==========================================================================
+
   useEffect(() => {
     const loadRooms = async () => {
       try {
@@ -63,8 +66,8 @@ export default function Accommodations() {
           ? data
           : data?.rooms || data?.data || [];
 
-        // Ensure each room has a rating (default to 4.5 if missing)
-        const roomsWithRating = roomData.map(room => ({
+        // Ensure each room has a rating
+        const roomsWithRating = roomData.map((room) => ({
           ...room,
           rating: room.rating || 4.5,
         }));
@@ -81,7 +84,10 @@ export default function Accommodations() {
     loadRooms();
   }, []);
 
+  // ==========================================================================
   // ROOM TYPES
+  // ==========================================================================
+
   const roomTypes = useMemo(() => {
     const types = rooms
       .map((room) => room.type)
@@ -90,7 +96,10 @@ export default function Accommodations() {
     return ["All", ...new Set(types)];
   }, [rooms]);
 
+  // ==========================================================================
   // FILTER AND SEARCH
+  // ==========================================================================
+
   const filteredRooms = useMemo(() => {
     let data = [...rooms];
 
@@ -161,7 +170,10 @@ export default function Accommodations() {
     sortBy,
   ]);
 
+  // ==========================================================================
   // STATISTICS
+  // ==========================================================================
+
   const availableRooms = rooms.filter(
     (room) =>
       String(room.status || "").toLowerCase() ===
@@ -185,215 +197,352 @@ export default function Accommodations() {
         fontFamily: FONTS.BODY,
       }}
     >
-      {/* HERO SECTION */}
+
+      {/* ================================================================== */}
+      {/* HERO SECTION                                                       */}
+      {/* ================================================================== */}
+
       <section
-        className="relative min-h-[620px] flex items-center overflow-hidden"
+        className="relative min-h-[58vh] md:min-h-[68vh] flex items-center overflow-hidden"
       >
+
+        {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80')",
-            transform: "scale(1.05)",
+              "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=2000&q=85')",
           }}
         />
 
+        {/* Soft luxury overlay */}
         <div
           className="absolute inset-0"
           style={{
             background: `
               linear-gradient(
-                135deg,
-                rgba(31,26,23,0.95) 0%,
-                rgba(31,26,23,0.7) 40%,
-                rgba(31,26,23,0.4) 70%,
-                rgba(31,26,23,0.15) 100%
+                90deg,
+                rgba(31,26,23,0.88) 0%,
+                rgba(31,26,23,0.66) 32%,
+                rgba(31,26,23,0.30) 68%,
+                rgba(31,26,23,0.12) 100%
               ),
               linear-gradient(
                 to bottom,
-                rgba(31,26,23,0.3) 0%,
-                transparent 30%,
-                transparent 60%,
-                rgba(31,26,23,0.6) 100%
+                rgba(31,26,23,0.18) 0%,
+                transparent 42%,
+                rgba(31,26,23,0.55) 100%
               )
             `,
           }}
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <p
-                className="inline-flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-[0.15em] rounded-full"
+        {/* Subtle glow */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 70% 45%, rgba(255,255,255,0.07), transparent 35%)",
+          }}
+        />
+
+        {/* Decorative lines */}
+        <div
+          className="absolute top-0 left-0 w-1/3 h-px"
+          style={{
+            background: `linear-gradient(to right, ${COLORS.ACCENT}, transparent)`,
+          }}
+        />
+
+        <div
+          className="absolute bottom-0 right-0 w-1/3 h-px"
+          style={{
+            background: `linear-gradient(to left, ${COLORS.ACCENT}, transparent)`,
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 w-full">
+          <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16">
+
+            <div className="max-w-2xl py-10 md:py-12">
+
+              {/* Eyebrow */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <p
+                  className="inline-flex items-center gap-3 px-4 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] rounded-full"
+                  style={{
+                    color: COLORS.ACCENT,
+                    background:
+                      "rgba(212,168,130,0.13)",
+                    border:
+                      "1px solid rgba(212,168,130,0.22)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <span
+                    className="h-px w-4"
+                    style={{
+                      background: COLORS.ACCENT,
+                    }}
+                  />
+
+                  Luxury Collection
+
+                  <span
+                    className="h-px w-4"
+                    style={{
+                      background: COLORS.ACCENT,
+                    }}
+                  />
+                </p>
+              </motion.div>
+
+              {/* Heading */}
+              <motion.h1
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.1,
+                }}
+                className="
+                  mt-5
+                  text-[42px]
+                  sm:text-5xl
+                  md:text-6xl
+                  lg:text-7xl
+                  font-light
+                  leading-[1.08]
+                "
                 style={{
-                  color: COLORS.ACCENT,
-                  background:
-                    "rgba(212,168,130,0.15)",
-                  border:
-                    "1px solid rgba(212,168,130,0.2)",
+                  fontFamily: FONTS.HEADING,
+                  color: COLORS.CREAM,
+                  letterSpacing: "-0.035em",
+                  textShadow:
+                    "0 3px 25px rgba(0,0,0,0.25)",
                 }}
               >
-                <span
-                  className="h-px w-4"
-                  style={{
-                    background: COLORS.ACCENT,
-                  }}
-                />
-
-                Luxury Collection
+                Find Your
+                <br />
 
                 <span
-                  className="h-px w-4"
-                  style={{
-                    background: COLORS.ACCENT,
-                  }}
-                />
-              </p>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mt-6 mb-4 text-5xl md:text-6xl lg:text-7xl font-light leading-[1.15]"
-              style={{
-                fontFamily: FONTS.HEADING,
-                color: COLORS.CREAM,
-              }}
-            >
-              Find Your
-              <br />
-
-              <span
-                style={{
-                  color: COLORS.ACCENT,
-                }}
-              >
-                Perfect Stay
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="max-w-xl text-base md:text-lg font-light leading-[1.8]"
-              style={{
-                color:
-                  "rgba(248,246,243,0.85)",
-              }}
-            >
-              Discover elegant rooms and luxury suites
-              designed to provide exceptional comfort,
-              unforgettable experiences and premium
-              hospitality.
-            </motion.p>
-
-            <div className="mt-8 flex items-center gap-6">
-              <div>
-                <p
-                  className="text-2xl font-light"
-                  style={{
-                    color: COLORS.CREAM,
-                  }}
-                >
-                  {rooms.length}
-                </p>
-
-                <p
-                  className="text-xs uppercase tracking-[0.15em]"
-                  style={{
-                    color:
-                      "rgba(248,246,243,0.5)",
-                  }}
-                >
-                  Rooms
-                </p>
-              </div>
-
-              <div
-                className="w-px h-10"
-                style={{
-                  background:
-                    "rgba(248,246,243,0.15)",
-                }}
-              />
-
-              <div>
-                <p
-                  className="text-2xl font-light"
-                  style={{
-                    color: COLORS.CREAM,
-                  }}
-                >
-                  {availableRooms}
-                </p>
-
-                <p
-                  className="text-xs uppercase tracking-[0.15em]"
-                  style={{
-                    color:
-                      "rgba(248,246,243,0.5)",
-                  }}
-                >
-                  Available
-                </p>
-              </div>
-
-              <div
-                className="w-px h-10"
-                style={{
-                  background:
-                    "rgba(248,246,243,0.15)",
-                }}
-              />
-
-              <div>
-                <p
-                  className="text-2xl font-light"
                   style={{
                     color: COLORS.ACCENT,
                   }}
                 >
-                  {averageRating.toFixed(1)}
-                </p>
+                  Perfect Stay.
+                </span>
+              </motion.h1>
 
-                <p
-                  className="text-xs uppercase tracking-[0.15em]"
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.2,
+                }}
+                className="
+                  mt-5
+                  max-w-xl
+                  text-sm
+                  sm:text-base
+                  md:text-lg
+                  font-light
+                  leading-[1.7]
+                "
+                style={{
+                  color:
+                    "rgba(248,246,243,0.84)",
+                }}
+              >
+                Discover elegant rooms and luxury
+                suites designed to provide exceptional
+                comfort, unforgettable experiences,
+                and premium hospitality.
+              </motion.p>
+
+              {/* Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.3,
+                }}
+                className="mt-7 flex items-center gap-5 sm:gap-7"
+              >
+
+                <div>
+                  <p
+                    className="text-2xl sm:text-3xl font-light"
+                    style={{
+                      color: COLORS.CREAM,
+                    }}
+                  >
+                    {rooms.length}
+                  </p>
+
+                  <p
+                    className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+                    style={{
+                      color:
+                        "rgba(248,246,243,0.48)",
+                    }}
+                  >
+                    Rooms
+                  </p>
+                </div>
+
+                <div
+                  className="h-10 w-px"
                   style={{
-                    color:
-                      "rgba(248,246,243,0.5)",
+                    background:
+                      "rgba(248,246,243,0.18)",
                   }}
-                >
-                  Rating
-                </p>
-              </div>
+                />
+
+                <div>
+                  <p
+                    className="text-2xl sm:text-3xl font-light"
+                    style={{
+                      color: COLORS.CREAM,
+                    }}
+                  >
+                    {availableRooms}
+                  </p>
+
+                  <p
+                    className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+                    style={{
+                      color:
+                        "rgba(248,246,243,0.48)",
+                    }}
+                  >
+                    Available
+                  </p>
+                </div>
+
+                <div
+                  className="h-10 w-px"
+                  style={{
+                    background:
+                      "rgba(248,246,243,0.18)",
+                  }}
+                />
+
+                <div>
+                  <p
+                    className="text-2xl sm:text-3xl font-light"
+                    style={{
+                      color: COLORS.ACCENT,
+                    }}
+                  >
+                    {averageRating.toFixed(1)}
+                  </p>
+
+                  <p
+                    className="mt-1 text-[9px] sm:text-[10px] uppercase tracking-[0.18em]"
+                    style={{
+                      color:
+                        "rgba(248,246,243,0.48)",
+                    }}
+                  >
+                    Rating
+                  </p>
+                </div>
+
+              </motion.div>
+
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="
+            absolute
+            bottom-5
+            left-1/2
+            -translate-x-1/2
+            hidden
+            md:flex
+            flex-col
+            items-center
+            gap-2
+          "
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <span
+            className="text-[10px] uppercase tracking-[0.2em]"
+            style={{
+              color:
+                "rgba(248,246,243,0.32)",
+            }}
+          >
+            Scroll
+          </span>
+
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="w-px h-7"
+            style={{
+              background: `linear-gradient(
+                to bottom,
+                ${COLORS.ACCENT},
+                transparent
+              )`,
+            }}
+          />
+        </motion.div>
+
       </section>
 
-      {/* SEARCH AND FILTER */}
+
+      {/* ================================================================== */}
+      {/* SEARCH AND FILTER                                                  */}
+      {/* ================================================================== */}
+
       <section className="max-w-[1200px] mx-auto px-6 py-12">
+
         <motion.div
           {...fadeUp}
           className="p-6 md:p-8"
           style={{
             background: COLORS.SURFACE,
-            borderRadius: BORDER_RADIUS.LARGE,
+            borderRadius:
+              BORDER_RADIUS.LARGE,
             boxShadow: SHADOWS.CARD,
             border:
               `1px solid ${COLORS.BORDER}`,
           }}
         >
+
           <div className="flex flex-wrap gap-4 items-center">
+
+            {/* Search */}
             <div className="flex-1 min-w-[200px] relative">
+
               <Search
                 size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2"
+                className="
+                  absolute
+                  left-4
+                  top-1/2
+                  -translate-y-1/2
+                "
                 style={{
                   color:
                     COLORS.TEXT_SECONDARY,
@@ -407,7 +556,13 @@ export default function Accommodations() {
                 onChange={(e) =>
                   setSearch(e.target.value)
                 }
-                className="w-full pl-12 pr-4 py-3.5 outline-none"
+                className="
+                  w-full
+                  pl-12
+                  pr-4
+                  py-3.5
+                  outline-none
+                "
                 style={{
                   borderRadius:
                     BORDER_RADIUS.MEDIUM,
@@ -419,14 +574,21 @@ export default function Accommodations() {
                     COLORS.TEXT_PRIMARY,
                 }}
               />
+
             </div>
 
+            {/* Type */}
             <select
               value={selectedType}
               onChange={(e) =>
                 setSelectedType(e.target.value)
               }
-              className="px-4 py-3.5 min-w-[160px] outline-none"
+              className="
+                px-4
+                py-3.5
+                min-w-[160px]
+                outline-none
+              "
               style={{
                 borderRadius:
                   BORDER_RADIUS.MEDIUM,
@@ -439,18 +601,27 @@ export default function Accommodations() {
               }}
             >
               {roomTypes.map((type) => (
-                <option key={type} value={type}>
+                <option
+                  key={type}
+                  value={type}
+                >
                   {type}
                 </option>
               ))}
             </select>
 
+            {/* Sort */}
             <select
               value={sortBy}
               onChange={(e) =>
                 setSortBy(e.target.value)
               }
-              className="px-4 py-3.5 min-w-[150px] outline-none"
+              className="
+                px-4
+                py-3.5
+                min-w-[150px]
+                outline-none
+              "
               style={{
                 borderRadius:
                   BORDER_RADIUS.MEDIUM,
@@ -479,11 +650,19 @@ export default function Accommodations() {
               </option>
             </select>
 
+            {/* Filters */}
             <button
               onClick={() =>
                 setShowFilters(!showFilters)
               }
-              className="flex items-center gap-2 px-6 py-3.5 font-semibold"
+              className="
+                flex
+                items-center
+                gap-2
+                px-6
+                py-3.5
+                font-semibold
+              "
               style={{
                 background: COLORS.PRIMARY,
                 color: COLORS.CREAM,
@@ -506,11 +685,19 @@ export default function Accommodations() {
                 }}
               />
             </button>
+
           </div>
 
+          {/* Filters */}
           {showFilters && (
             <div
-              className="mt-6 pt-6 flex flex-wrap gap-4"
+              className="
+                mt-6
+                pt-6
+                flex
+                flex-wrap
+                gap-4
+              "
               style={{
                 borderTop:
                   `1px solid ${COLORS.BORDER}`,
@@ -527,7 +714,12 @@ export default function Accommodations() {
               ].map((amenity) => (
                 <label
                   key={amenity}
-                  className="flex items-center gap-2 text-sm"
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                    text-sm
+                  "
                   style={{
                     color:
                       COLORS.TEXT_SECONDARY,
@@ -547,17 +739,28 @@ export default function Accommodations() {
               ))}
             </div>
           )}
+
         </motion.div>
+
       </section>
 
-      {/* ROOM GRID */}
+
+      {/* ================================================================== */}
+      {/* ROOM GRID                                                          */}
+      {/* ================================================================== */}
+
       <section className="max-w-[1200px] mx-auto px-6 pb-20">
+
         <motion.div
           {...fadeUp}
           className="mb-8"
         >
           <h2
-            className="text-3xl md:text-4xl font-light"
+            className="
+              text-3xl
+              md:text-4xl
+              font-light
+            "
             style={{
               fontFamily: FONTS.HEADING,
               color: COLORS.PRIMARY,
@@ -585,13 +788,27 @@ export default function Accommodations() {
           </p>
         </motion.div>
 
+
+        {/* ================================================================ */}
+        {/* LOADING                                                           */}
+        {/* ================================================================ */}
+
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              lg:grid-cols-3
+              gap-6
+              items-stretch
+            "
+          >
             {[1, 2, 3, 4, 5, 6].map(
               (item) => (
                 <div
                   key={item}
-                  className="h-[460px] animate-pulse"
+                  className="h-[500px] animate-pulse"
                   style={{
                     borderRadius:
                       BORDER_RADIUS.LARGE,
@@ -603,6 +820,11 @@ export default function Accommodations() {
             )}
           </div>
         )}
+
+
+        {/* ================================================================ */}
+        {/* NO ROOMS                                                         */}
+        {/* ================================================================ */}
 
         {!loading &&
           filteredRooms.length === 0 && (
@@ -637,16 +859,33 @@ export default function Accommodations() {
                     COLORS.TEXT_SECONDARY,
                 }}
               >
-                Try adjusting your search or filters.
+                Try adjusting your search or
+                filters.
               </p>
             </motion.div>
           )}
 
+
+        {/* ================================================================ */}
+        {/* ROOMS                                                             */}
+        {/* ================================================================ */}
+
         {!loading &&
           filteredRooms.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                gap-6
+                items-stretch
+              "
+            >
+
               {filteredRooms.map(
                 (room, index) => {
+
                   const amenities =
                     Array.isArray(
                       room.amenities
@@ -677,10 +916,18 @@ export default function Accommodations() {
                       transition={{
                         duration: 0.4,
                         delay:
-                          (index % 6) *
-                          0.05,
+                          (index % 6) * 0.05,
                       }}
-                      className="group overflow-hidden transition-all duration-500"
+                      className="
+                        group
+                        h-full
+                        min-h-0
+                        overflow-hidden
+                        transition-all
+                        duration-500
+                        flex
+                        flex-col
+                      "
                       style={{
                         background:
                           COLORS.SURFACE,
@@ -705,7 +952,21 @@ export default function Accommodations() {
                         setHoveredRoom(null)
                       }
                     >
-                      <div className="relative overflow-hidden h-56">
+
+                      {/* ================================================== */}
+                      {/* IMAGE                                               */}
+                      {/* ================================================== */}
+
+                      <div
+                        className="
+                          relative
+                          overflow-hidden
+                          h-56
+                          min-h-[224px]
+                          max-h-[224px]
+                          flex-shrink-0
+                        "
+                      >
                         <img
                           src={
                             room.image ||
@@ -715,11 +976,32 @@ export default function Accommodations() {
                             room.type ||
                             "Hotel room"
                           }
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="
+                            block
+                            w-full
+                            h-full
+                            min-h-full
+                            object-cover
+                            object-center
+                            transition-transform
+                            duration-700
+                            group-hover:scale-110
+                          "
                         />
 
+                        {/* Status */}
                         <div
-                          className="absolute top-4 right-4 px-3 py-1.5 text-xs font-semibold uppercase rounded-full"
+                          className="
+                            absolute
+                            top-4
+                            right-4
+                            px-3
+                            py-1.5
+                            text-xs
+                            font-semibold
+                            uppercase
+                            rounded-full
+                          "
                           style={{
                             background:
                               isAvailable
@@ -732,8 +1014,18 @@ export default function Accommodations() {
                             "Unknown"}
                         </div>
 
+                        {/* Price */}
                         <div
-                          className="absolute bottom-4 left-4 px-4 py-2 rounded-full font-bold text-sm"
+                          className="
+                            absolute
+                            bottom-4
+                            left-4
+                            px-4
+                            py-2
+                            rounded-full
+                            font-bold
+                            text-sm
+                          "
                           style={{
                             background:
                               COLORS.ACCENT,
@@ -747,8 +1039,19 @@ export default function Accommodations() {
                           ).toLocaleString()}
                         </div>
 
+                        {/* Rating */}
                         <div
-                          className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full flex items-center gap-1.5"
+                          className="
+                            absolute
+                            bottom-4
+                            right-4
+                            px-3
+                            py-1.5
+                            rounded-full
+                            flex
+                            items-center
+                            gap-1.5
+                          "
                           style={{
                             background:
                               "rgba(0,0,0,0.6)",
@@ -765,15 +1068,41 @@ export default function Accommodations() {
                             }}
                           />
 
-                          <span className="text-white text-sm font-semibold">
+                          <span
+                            className="
+                              text-white
+                              text-sm
+                              font-semibold
+                            "
+                          >
                             {rating.toFixed(1)}
                           </span>
                         </div>
+
                       </div>
 
-                      <div className="p-6">
+
+                      {/* ================================================== */}
+                      {/* CARD BODY                                            */}
+                      {/* ================================================== */}
+
+                      <div
+                        className="
+                          p-6
+                          flex
+                          flex-col
+                          flex-1
+                          min-h-0
+                        "
+                      >
+
+                        {/* Title */}
                         <h3
-                          className="text-xl font-semibold"
+                          className="
+                            text-xl
+                            font-semibold
+                            min-h-[28px]
+                          "
                           style={{
                             fontFamily:
                               FONTS.HEADING,
@@ -785,8 +1114,13 @@ export default function Accommodations() {
                             "Luxury Room"}
                         </h3>
 
+
+                        {/* Room number */}
                         <p
-                          className="text-xs mt-1"
+                          className="
+                            text-xs
+                            mt-1
+                          "
                           style={{
                             color:
                               COLORS.TEXT_SECONDARY,
@@ -797,8 +1131,21 @@ export default function Accommodations() {
                             "-"}
                         </p>
 
+
+                        {/* ================================================= */}
+                        {/* DESCRIPTION                                         */}
+                        {/* ================================================= */}
+
                         <p
-                          className="text-sm mt-3 leading-relaxed"
+                          className="
+                            text-sm
+                            mt-3
+                            leading-relaxed
+                            line-clamp-3
+                            min-h-[72px]
+                            max-h-[72px]
+                            overflow-hidden
+                          "
                           style={{
                             color:
                               COLORS.TEXT_SECONDARY,
@@ -808,7 +1155,22 @@ export default function Accommodations() {
                             "Experience comfort, elegance and premium hospitality in our beautifully designed accommodation."}
                         </p>
 
-                        <div className="flex flex-wrap gap-2 mt-4">
+
+                        {/* ================================================= */}
+                        {/* AMENITIES                                          */}
+                        {/* ================================================= */}
+
+                        <div
+                          className="
+                            flex
+                            flex-wrap
+                            gap-2
+                            mt-4
+                            min-h-[32px]
+                            max-h-[64px]
+                            overflow-hidden
+                          "
+                        >
                           {amenities
                             .slice(0, 3)
                             .map(
@@ -819,7 +1181,12 @@ export default function Accommodations() {
                                   key={
                                     amenity
                                   }
-                                  className="text-xs px-3 py-1 rounded-full"
+                                  className="
+                                    text-xs
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                  "
                                   style={{
                                     background:
                                       "rgba(212,168,130,0.08)",
@@ -837,7 +1204,12 @@ export default function Accommodations() {
                           {amenities.length >
                             3 && (
                             <span
-                              className="text-xs px-3 py-1 rounded-full"
+                              className="
+                                text-xs
+                                px-3
+                                py-1
+                                rounded-full
+                              "
                               style={{
                                 background:
                                   COLORS.BACKGROUND,
@@ -854,15 +1226,35 @@ export default function Accommodations() {
                           )}
                         </div>
 
+
+                        {/* ================================================= */}
+                        {/* ROOM DETAILS                                       */}
+                        {/* ================================================= */}
+
                         <div
-                          className="grid grid-cols-2 gap-3 mt-4 py-4 border-y"
+                          className="
+                            grid
+                            grid-cols-2
+                            gap-3
+                            mt-4
+                            py-4
+                            border-y
+                          "
                           style={{
                             borderColor:
                               COLORS.BORDER,
                           }}
                         >
+
+                          {/* Guests */}
                           <div
-                            className="flex items-center gap-2 text-sm"
+                            className="
+                              flex
+                              items-center
+                              gap-2
+                              text-sm
+                              min-w-0
+                            "
                             style={{
                               color:
                                 COLORS.TEXT_SECONDARY,
@@ -870,19 +1262,30 @@ export default function Accommodations() {
                           >
                             <Users
                               size={16}
+                              className="flex-shrink-0"
                               style={{
                                 color:
                                   COLORS.ACCENT,
                               }}
                             />
 
-                            {room.guests ||
-                              "-"}{" "}
-                            Guests
+                            <span className="truncate">
+                              {room.guests ||
+                                "-"}{" "}
+                              Guests
+                            </span>
                           </div>
 
+
+                          {/* Area */}
                           <div
-                            className="flex items-center gap-2 text-sm"
+                            className="
+                              flex
+                              items-center
+                              gap-2
+                              text-sm
+                              min-w-0
+                            "
                             style={{
                               color:
                                 COLORS.TEXT_SECONDARY,
@@ -890,17 +1293,28 @@ export default function Accommodations() {
                           >
                             <Maximize
                               size={16}
+                              className="flex-shrink-0"
                               style={{
                                 color:
                                   COLORS.ACCENT,
                               }}
                             />
 
-                            {roomArea}
+                            <span className="truncate">
+                              {roomArea}
+                            </span>
                           </div>
 
+
+                          {/* Bed */}
                           <div
-                            className="flex items-center gap-2 text-sm"
+                            className="
+                              flex
+                              items-center
+                              gap-2
+                              text-sm
+                              min-w-0
+                            "
                             style={{
                               color:
                                 COLORS.TEXT_SECONDARY,
@@ -908,18 +1322,29 @@ export default function Accommodations() {
                           >
                             <BedDouble
                               size={16}
+                              className="flex-shrink-0"
                               style={{
                                 color:
                                   COLORS.ACCENT,
                               }}
                             />
 
-                            {room.bed ||
-                              "-"}
+                            <span className="truncate">
+                              {room.bed ||
+                                "-"}
+                            </span>
                           </div>
 
+
+                          {/* View */}
                           <div
-                            className="flex items-center gap-2 text-sm"
+                            className="
+                              flex
+                              items-center
+                              gap-2
+                              text-sm
+                              min-w-0
+                            "
                             style={{
                               color:
                                 COLORS.TEXT_SECONDARY,
@@ -927,20 +1352,39 @@ export default function Accommodations() {
                           >
                             <Mountain
                               size={16}
+                              className="flex-shrink-0"
                               style={{
                                 color:
                                   COLORS.ACCENT,
                               }}
                             />
 
-                            {room.bar ||
-                              "-"}
+                            <span className="truncate">
+                              {room.bar ||
+                                "-"}
+                            </span>
                           </div>
+
                         </div>
+
+
+                        {/* ================================================= */}
+                        {/* BUTTON                                             */}
+                        {/* ================================================= */}
 
                         <Link
                           to={`/rooms/experience/${room._id}`}
-                          className="flex items-center justify-center gap-2 w-full mt-5 py-3 font-semibold"
+                          className="
+                            flex
+                            items-center
+                            justify-center
+                            gap-2
+                            w-full
+                            mt-auto
+                            pt-3
+                            pb-3
+                            font-semibold
+                          "
                           style={{
                             background:
                               COLORS.PRIMARY,
@@ -951,44 +1395,69 @@ export default function Accommodations() {
                           }}
                         >
                           View Room
+
                           <ArrowRight
                             size={18}
                           />
                         </Link>
+
                       </div>
+
                     </motion.div>
                   );
                 }
               )}
+
             </div>
           )}
+
       </section>
 
-      {/* FEATURES */}
+
+      {/* ================================================================== */}
+      {/* FEATURES                                                           */}
+      {/* ================================================================== */}
+
       <section className="max-w-[1200px] mx-auto px-6 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div
+          className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            lg:grid-cols-4
+            gap-6
+            items-stretch
+          "
+        >
+
           {[
             {
               icon: BedDouble,
               title: "Luxury Rooms",
-              desc: "Beautifully designed rooms with modern interiors and premium furnishings.",
+              desc:
+                "Beautifully designed rooms with modern interiors and premium furnishings.",
             },
             {
               icon: Users,
               title: "24/7 Concierge",
-              desc: "Professional concierge service available any time during your stay.",
+              desc:
+                "Professional concierge service available any time during your stay.",
             },
             {
               icon: Utensils,
               title: "Fine Dining",
-              desc: "World-class restaurants serving international cuisine.",
+              desc:
+                "World-class restaurants serving international cuisine.",
             },
             {
               icon: Sparkles,
               title: "Spa & Wellness",
-              desc: "Relax with luxurious spa treatments and wellness experiences.",
+              desc:
+                "Relax with luxurious spa treatments and wellness experiences.",
             },
           ].map((item, index) => {
+
             const Icon = item.icon;
 
             return (
@@ -999,7 +1468,11 @@ export default function Accommodations() {
                   duration: 0.4,
                   delay: index * 0.08,
                 }}
-                className="p-8 text-center"
+                className="
+                  p-8
+                  text-center
+                  h-full
+                "
                 style={{
                   background:
                     COLORS.SURFACE,
@@ -1011,8 +1484,18 @@ export default function Accommodations() {
                     SHADOWS.CARD,
                 }}
               >
+
                 <div
-                  className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+                  className="
+                    w-16
+                    h-16
+                    rounded-full
+                    mx-auto
+                    mb-4
+                    flex
+                    items-center
+                    justify-center
+                  "
                   style={{
                     background:
                       "rgba(212,168,130,0.1)",
@@ -1028,7 +1511,10 @@ export default function Accommodations() {
                 </div>
 
                 <h3
-                  className="text-lg font-semibold"
+                  className="
+                    text-lg
+                    font-semibold
+                  "
                   style={{
                     fontFamily:
                       FONTS.HEADING,
@@ -1040,7 +1526,11 @@ export default function Accommodations() {
                 </h3>
 
                 <p
-                  className="mt-2 text-sm leading-relaxed"
+                  className="
+                    mt-2
+                    text-sm
+                    leading-relaxed
+                  "
                   style={{
                     color:
                       COLORS.TEXT_SECONDARY,
@@ -1048,90 +1538,256 @@ export default function Accommodations() {
                 >
                   {item.desc}
                 </p>
+
               </motion.div>
             );
           })}
+
         </div>
+
       </section>
 
-      {/* CTA */}
-      <section className="px-4 py-20 md:py-28 sm:px-8 md:px-12 lg:px-[60px] relative overflow-hidden">
+
+      {/* ================================================================== */}
+      {/* CTA                                                                */}
+      {/* ================================================================== */}
+
+      <section
+        className="
+          px-4
+          py-20
+          md:py-28
+          sm:px-8
+          md:px-12
+          lg:px-[60px]
+          relative
+          overflow-hidden
+        "
+      >
+
+        {/* Background */}
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(135deg, ${COLORS.PRIMARY} 0%, #3B2F28 100%)`,
+            background:
+              `linear-gradient(
+                135deg,
+                ${COLORS.PRIMARY} 0%,
+                #3B2F28 100%
+              )`,
           }}
         />
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `radial-gradient(circle at 50% 50%, ${COLORS.ACCENT} 2px, transparent 2px)`,
-          backgroundSize: '60px 60px'
-        }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px" style={{ background: `linear-gradient(to right, transparent, ${COLORS.ACCENT}, transparent)` }} />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-px" style={{ background: `linear-gradient(to right, transparent, ${COLORS.ACCENT}, transparent)` }} />
 
-        <motion.div {...fadeUp} className="relative mx-auto max-w-[800px] text-center">
-          <div className="relative inline-block mb-8">
-            <div className="absolute inset-0 rounded-full animate-ping" style={{ 
-              background: `rgba(212, 168, 130, 0.2)`,
-              animationDuration: '2s'
-            }} />
+        {/* Pattern */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              `radial-gradient(
+                circle at 50% 50%,
+                ${COLORS.ACCENT} 2px,
+                transparent 2px
+              )`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Decorative lines */}
+        <div
+          className="
+            absolute
+            top-0
+            left-1/2
+            -translate-x-1/2
+            w-32
+            h-px
+          "
+          style={{
+            background:
+              `linear-gradient(
+                to right,
+                transparent,
+                ${COLORS.ACCENT},
+                transparent
+              )`,
+          }}
+        />
+
+        <div
+          className="
+            absolute
+            bottom-0
+            left-1/2
+            -translate-x-1/2
+            w-32
+            h-px
+          "
+          style={{
+            background:
+              `linear-gradient(
+                to right,
+                transparent,
+                ${COLORS.ACCENT},
+                transparent
+              )`,
+          }}
+        />
+
+
+        {/* CTA content */}
+        <motion.div
+          {...fadeUp}
+          className="
+            relative
+            mx-auto
+            max-w-[800px]
+            text-center
+          "
+        >
+
+          {/* Icon */}
+          <div
+            className="
+              relative
+              inline-block
+              mb-8
+            "
+          >
+
             <div
-              className="relative inline-flex items-center justify-center w-20 h-20 rounded-full"
+              className="
+                absolute
+                inset-0
+                rounded-full
+                animate-ping
+              "
               style={{
-                background: `rgba(212, 168, 130, 0.15)`,
-                border: `2px solid rgba(212, 168, 130, 0.2)`,
+                background:
+                  "rgba(212,168,130,0.2)",
+                animationDuration: "2s",
+              }}
+            />
+
+            <div
+              className="
+                relative
+                inline-flex
+                items-center
+                justify-center
+                w-20
+                h-20
+                rounded-full
+              "
+              style={{
+                background:
+                  "rgba(212,168,130,0.15)",
+                border:
+                  "2px solid rgba(212,168,130,0.2)",
               }}
             >
-              <HeartIcon className="w-10 h-10" style={{ color: COLORS.ACCENT }} />
+              <HeartIcon
+                className="w-10 h-10"
+                style={{
+                  color: COLORS.ACCENT,
+                }}
+              />
             </div>
+
           </div>
 
+
+          {/* Heading */}
           <h2
-            className="text-3xl md:text-5xl font-light"
+            className="
+              text-3xl
+              md:text-5xl
+              font-light
+            "
             style={{
-              fontFamily: FONTS.HEADING,
+              fontFamily:
+                FONTS.HEADING,
               color: COLORS.CREAM,
-              letterSpacing: "-0.02em",
+              letterSpacing:
+                "-0.02em",
             }}
           >
             Experience Luxury Like Never Before
           </h2>
 
+
+          {/* Description */}
           <p
-            className="max-w-2xl mx-auto mt-4 text-base leading-relaxed"
-            style={{ color: "rgba(248,246,243,0.75)" }}
+            className="
+              max-w-2xl
+              mx-auto
+              mt-4
+              text-base
+              leading-relaxed
+            "
+            style={{
+              color:
+                "rgba(248,246,243,0.75)",
+            }}
           >
-            Discover elegant accommodations, exceptional hospitality and unforgettable moments.
-            Whether you're traveling for business or leisure, LuxuryStay promises comfort beyond expectations.
+            Discover elegant accommodations,
+            exceptional hospitality and unforgettable
+            moments. Whether you're traveling for
+            business or leisure, LuxuryStay promises
+            comfort beyond expectations.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+
+          {/* Button */}
+          <div
+            className="
+              flex
+              flex-col
+              sm:flex-row
+              items-center
+              justify-center
+              gap-4
+              mt-8
+            "
+          >
+
             <Link
               to="/homeservice"
-              className="inline-flex items-center gap-3 px-8 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105 group"
+              className="
+                inline-flex
+                items-center
+                gap-3
+                px-8
+                py-4
+                text-sm
+                font-semibold
+                rounded-full
+                transition-all
+                duration-300
+                hover:scale-105
+                group
+              "
               style={{
-                background: COLORS.ACCENT,
-                color: COLORS.CREAM,
-                boxShadow: `0 4px 24px rgba(212, 168, 130, 0.3)`,
+                background:
+                  COLORS.ACCENT,
+                color:
+                  COLORS.CREAM,
+                boxShadow:
+                  "0 4px 24px rgba(212, 168, 130, 0.3)",
               }}
             >
-              <PlayIcon className="w-5 h-5" />
+              <PlayIcon
+                className="w-5 h-5"
+              />
+
               Explore Services
             </Link>
-            {/* <Link
-              to="/homeservice"
-              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:bg-white/10"
-              style={{
-                color: COLORS.CREAM,
-                border: `1px solid rgba(248,246,243,0.2)`,
-              }}
-            >
-              <PlayIcon className="w-5 h-5" />
-              Explore Services
-            </Link> */}
+
           </div>
+
         </motion.div>
+
       </section>
+
     </main>
   );
 }

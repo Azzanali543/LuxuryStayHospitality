@@ -1,27 +1,32 @@
-import BillingStatusBadge from './BillingStatusBadge';
-import { formatCurrency } from '../utils/billing';
+import BillingStatusBadge from "./BillingStatusBadge";
+import { formatCurrency } from "../utils/billing";
 
 function Line({ label, value, isTotal = false, isDiscount = false }) {
   return (
     <div
       className={`flex items-center justify-between ${
-        isTotal ? 'border-t border-border pt-3 mt-2' : 'py-1.5'
+        isTotal
+          ? "mt-3 border-t border-[#E9E4DD] pt-4"
+          : "py-2"
       }`}
     >
       <span
-        className={`font-body ${
-          isTotal ? 'text-sm font-semibold text-ink' : 'text-sm text-ink/60'
+        className={`${
+          isTotal
+            ? "text-sm font-semibold text-[#2A211B]"
+            : "text-sm text-[#6B625B]"
         }`}
       >
         {label}
       </span>
+
       <span
         className={`font-mono ${
           isTotal
-            ? 'text-lg font-bold text-primary'
+            ? "text-xl font-bold text-[#C8A96A]"
             : isDiscount
-              ? 'text-sm font-medium text-success'
-              : 'text-sm font-medium text-ink'
+            ? "text-sm font-semibold text-[#2F6B4F]"
+            : "text-sm font-medium text-[#2A211B]"
         }`}
       >
         {value}
@@ -32,24 +37,48 @@ function Line({ label, value, isTotal = false, isDiscount = false }) {
 
 export default function CostBreakdown({ booking, breakdown }) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-6 shadow-soft animate-fadeIn">
+    <section className="rounded-3xl border border-[#E9E4DD] bg-white p-6 shadow-lg transition-all duration-300">
       <div className="flex items-center justify-between">
-        <h3 className="font-display text-lg font-semibold text-ink">Cost Breakdown</h3>
+        <h3 className="text-lg font-semibold text-[#2A211B]">
+          Cost Breakdown
+        </h3>
+
         <BillingStatusBadge status={booking.paymentStatus} />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-4">
         {breakdown.charges.map((charge, index) => (
-          <Line key={`${charge.label}-${index}`} label={charge.label} value={formatCurrency(charge.amount)} />
+          <Line
+            key={`${charge.label}-${index}`}
+            label={charge.label}
+            value={formatCurrency(charge.amount)}
+          />
         ))}
+
         <Line
-          label={`Tax${breakdown.taxRateLabel ? ` (${breakdown.taxRateLabel})` : ''}`}
+          label={`Tax${
+            breakdown.taxRateLabel
+              ? ` (${breakdown.taxRateLabel})`
+              : ""
+          }`}
           value={formatCurrency(breakdown.tax)}
         />
+
         {breakdown.discount > 0 && (
-          <Line label="Discount" value={`- ${formatCurrency(breakdown.discount)}`} isDiscount />
+          <Line
+            label="Discount"
+            value={`- ${formatCurrency(
+              breakdown.discount
+            )}`}
+            isDiscount
+          />
         )}
-        <Line label="Grand Total" value={formatCurrency(breakdown.grandTotal)} isTotal />
+
+        <Line
+          label="Grand Total"
+          value={formatCurrency(breakdown.grandTotal)}
+          isTotal
+        />
       </div>
     </section>
   );

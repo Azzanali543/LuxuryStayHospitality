@@ -9,7 +9,13 @@ const ICONS = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
     </>
   ),
-  paid: <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />,
+  paid: (
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 12.75l6 6 9-13.5"
+    />
+  ),
   print: (
     <path
       strokeLinecap="round"
@@ -26,39 +32,94 @@ const ICONS = {
   ),
 };
 
-function ActionButton({ icon, label, onClick, disabled, variant = 'outline' }) {
+function ActionButton({
+  icon,
+  label,
+  onClick,
+  disabled,
+  variant = "outline",
+}) {
   const base =
-    'flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-body text-sm font-semibold transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100';
+    "flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40";
+
   const variants = {
-    primary: 'bg-primary text-white shadow-soft hover:bg-primary-dark',
-    outline: 'border border-border bg-card text-ink hover:border-primary-light hover:text-primary',
-    success: 'bg-success/10 text-success border border-success/30 hover:bg-success/15',
+    primary:
+      "bg-[#1F1A17] text-white hover:bg-[#2A211B] shadow-md",
+
+    outline:
+      "border border-[#E9E4DD] bg-white text-[#2A211B] hover:border-[#C8A96A] hover:text-[#C8A96A]",
+
+    success:
+      "border border-[#2F6B4F]/20 bg-[#2F6B4F]/10 text-[#2F6B4F] hover:bg-[#2F6B4F]/15",
   };
 
   return (
-    <button onClick={onClick} disabled={disabled} className={`${base} ${variants[variant]}`}>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${base} ${variants[variant]}`}
+    >
+      <svg
+        width="17"
+        height="17"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         {icon}
       </svg>
+
       {label}
     </button>
   );
 }
 
-export default function BillingActions({ disabled, isPaid, marking, onViewInvoice, onMarkPaid, onPrint, onDownloadPdf }) {
+export default function BillingActions({
+  disabled,
+  isPaid,
+  marking,
+  onViewInvoice,
+  onMarkPaid,
+  onPrint,
+  onDownloadPdf,
+}) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-6 shadow-soft animate-fadeIn">
-      <h3 className="font-display text-lg font-semibold text-ink">Billing Actions</h3>
-      <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-        <ActionButton icon={ICONS.view} label="View Invoice" onClick={onViewInvoice} disabled={disabled} variant="primary" />
+    <section className="rounded-3xl border border-[#E9E4DD] bg-white p-6 shadow-lg">
+      <h3 className="text-lg font-semibold text-[#2A211B]">
+        Billing Actions
+      </h3>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <ActionButton
+          icon={ICONS.view}
+          label="View Invoice"
+          onClick={onViewInvoice}
+          disabled={disabled}
+          variant="primary"
+        />
+
         <ActionButton
           icon={ICONS.paid}
-          label={isPaid ? 'Paid' : marking ? 'Recording…' : 'Record Cash Payment'}
+          label={
+            isPaid
+              ? "Paid"
+              : marking
+              ? "Recording..."
+              : "Record Cash Payment"
+          }
           onClick={onMarkPaid}
           disabled={disabled || isPaid || marking}
           variant="success"
         />
-        <ActionButton icon={ICONS.print} label="Print Invoice" onClick={onPrint} disabled={disabled} />
+
+        <ActionButton
+          icon={ICONS.print}
+          label="Print Invoice"
+          onClick={onPrint}
+          disabled={disabled}
+        />
+
         <ActionButton
           icon={ICONS.download}
           label="Download PDF"

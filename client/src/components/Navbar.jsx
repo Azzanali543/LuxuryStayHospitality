@@ -19,7 +19,7 @@ import {
 const PUBLIC_LINKS = [
   { label: "Home", path: "/" },
   { label: "About", path: "/#about" },
-  { label: "Services", path: "/HomeService" },
+  { label: "Services", path: "/homeservice" },
   { label: "Contact", path: "/contact" },
   { label: "Gallery", path: "/gallery" },
   { label: "Rooms", path: "/rooms" },
@@ -29,7 +29,7 @@ const PUBLIC_LINKS = [
 const GUEST_LINKS = [
   { label: "Home", path: "/" },
   { label: "About", path: "/#about" },
-  { label: "Services", path: "/HomeService" },
+  { label: "Services", path: "/homeservice" },
   { label: "Contact", path: "/contact" },
   { label: "Gallery", path: "/gallery" },
   { label: "Rooms", path: "/rooms" },
@@ -64,6 +64,21 @@ const timeAgo = (dateStr) => {
 
 const getInitials = (name = "") =>
   name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+
+function NavItem({ to, className, style, children }) {
+  if (typeof to === "string" && to.includes("#")) {
+    return (
+      <HashLink smooth to={to} className={className} style={style}>
+        {children}
+      </HashLink>
+    );
+  }
+  return (
+    <Link to={to} className={className} style={style}>
+      {children}
+    </Link>
+  );
+}
 
 export default function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -141,7 +156,13 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (typeof path === "string" && path.includes("#")) {
+      const [pathname, hash] = path.split("#");
+      return location.pathname === (pathname || "/") && location.hash === `#${hash}`;
+    }
+    return location.pathname === path;
+  };
 
   const NotificationBell = ({ dark }) => (
     <div ref={notifRef} style={{ position: "relative" }}>
@@ -377,9 +398,9 @@ export default function Navbar() {
 
           <div className="nav-links-desktop" style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: "2px" }}>
             {ADMIN_LINKS.map((link) => (
-              <HashLink key={link.path} smooth to={link.path} className="nav-link" style={linkStyle(link.path)}>
+              <NavItem key={link.path} to={link.path} className="nav-link" style={linkStyle(link.path)}>
                 {link.label}
-              </HashLink>
+              </NavItem>
             ))}
           </div>
 
@@ -490,9 +511,9 @@ export default function Navbar() {
 
           <div className="nav-links-desktop" style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: "2px" }}>
             {GUEST_LINKS.map((link) => (
-              <HashLink key={link.path} smooth to={link.path} className="nav-link" style={linkStyle(link.path)}>
+              <NavItem key={link.path} to={link.path} className="nav-link" style={linkStyle(link.path)}>
                 {link.label}
-              </HashLink>
+              </NavItem>
             ))}
           </div>
 
@@ -572,18 +593,19 @@ export default function Navbar() {
         .btn-register:hover { filter: brightness(1.08); transform: translateY(-1px); }
       `}</style>
 
-      <nav style={{
-        background: COLORS.PRIMARY,
-        borderBottom: `2px solid ${COLORS.ACCENT}`,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 24px",
-        height: "64px",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
-      }}>
+        <nav style={{
+          background: COLORS.PRIMARY,
+          borderBottom: `2px solid ${COLORS.ACCENT}`,
+          display: "flex",
+          alignItems: "center",
+          padding: "0 16px",
+          height: "64px",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
+          minWidth: 0,
+        }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", marginRight: "36px", flexShrink: 0 }}>
           <img src={Logo} alt="LuxuryStay Logo" style={{ height: "46px", width: "auto", objectFit: "contain" }} />
           <span style={{ fontFamily: FONTS.HEADING, fontSize: "15px", color: COLORS.ACCENT }}>
@@ -593,14 +615,14 @@ export default function Navbar() {
 
         <div className="nav-links-desktop" style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: "2px" }}>
           {PUBLIC_LINKS.map((link) => (
-            <HashLink key={link.path} smooth to={link.path} className="nav-link" style={{
+            <NavItem key={link.path} to={link.path} className="nav-link" style={{
               fontFamily: FONTS.BODY, fontSize: "13px", color: COLORS.CREAM,
               opacity: isActive(link.path) ? 1 : 0.72, padding: "7px 15px", borderRadius: "9px",
               textDecoration: "none", background: isActive(link.path) ? "rgba(243,229,216,0.16)" : "transparent",
               whiteSpace: "nowrap", transition: "opacity 0.15s ease, background 0.15s ease",
             }}>
               {link.label}
-            </HashLink>
+            </NavItem>
           ))}
         </div>
 

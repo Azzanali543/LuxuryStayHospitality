@@ -4,7 +4,7 @@ import { COLORS, FONTS } from "../constants/theme";
 const DashboardLayout = ({ children }) => {
   return (
     <div
-      className="flex min-h-screen"
+      className="dashboard-shell flex min-h-screen w-full"
       style={{
         background: COLORS.BACKGROUND,
         fontFamily: FONTS.BODY,
@@ -12,7 +12,7 @@ const DashboardLayout = ({ children }) => {
     >
       <AsideBar />
 
-      <main className="flex-1 overflow-x-auto p-6 md:p-8">
+      <main className="dashboard-main min-w-0 flex-1 overflow-x-hidden p-3 pt-16 sm:p-5 lg:p-8 lg:pt-8">
         {children}
       </main>
     </div>

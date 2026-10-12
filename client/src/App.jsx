@@ -8,13 +8,13 @@ import useAuth from "./hooks/useAuth"
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import HomePage from "./pages/HomePage";
-import LoginPage     from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import RegisterPAge from './pages/RegisterPage'
 import PrivateRoute from "./utils/PrivateRoute"
-import RoleRoute    from "./utils/RoleRoute"
+import RoleRoute from "./utils/RoleRoute"
 import EditRoom from "./pages/EditRoom";
 import NotFoundPage from "./pages/NotFoundPage";
-import { ROLES }    from "./constants/roles";
+import { ROLES } from "./constants/roles";
 import BillingPage from "./pages/BillingPage"
 import BookingPage from "./pages/BookingPage"
 import ContactPage from "./pages/ContactPage"
@@ -43,7 +43,7 @@ import GuestProfilePage from "./pages/GuestProfilePage";
 import Invoice from "./pages/Invoice";
 import RoomsPage from "./pages/RoomManagement";
 import NewRoom from "./pages/NewRoom";
-import ManagerDashboard  from "./pages/ManagerDashboard"
+import ManagerDashboard from "./pages/ManagerDashboard"
 import ReceptionistDashboard from "./pages/ReceptionistDasboard"
 import ServicesPage from "./pages/ServicesPage"
 import ServiceRequestPage from "./pages/componnts/ServicesRequestPage"
@@ -57,23 +57,23 @@ import SettingsPage from "./pages/SettingPage";
 function Placeholder({ title, owner }) {
   return (
     <div style={{
-      minHeight:      "60vh",
-      display:        "flex",
-      flexDirection:  "column",
-      alignItems:     "center",
+      minHeight: "60vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       justifyContent: "center",
-      fontFamily:     "'Inter', sans-serif",
-      gap:            "12px",
+      fontFamily: "'Inter', sans-serif",
+      gap: "12px",
     }}>
       <div style={{
-        width:        "56px",
-        height:       "56px",
+        width: "56px",
+        height: "56px",
         borderRadius: "50%",
-        background:   "#f2ebe4",
-        display:      "flex",
-        alignItems:   "center",
+        background: "#f2ebe4",
+        display: "flex",
+        alignItems: "center",
         justifyContent: "center",
-        fontSize:     "24px",
+        fontSize: "24px",
       }}>🚧</div>
       <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#3e2f20", margin: 0 }}>
         {title}
@@ -88,13 +88,13 @@ function Placeholder({ title, owner }) {
 function UnauthorizedPage() {
   return (
     <div style={{
-      minHeight:      "60vh",
-      display:        "flex",
-      flexDirection:  "column",
-      alignItems:     "center",
+      minHeight: "60vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       justifyContent: "center",
-      fontFamily:     "'Inter', sans-serif",
-      gap:            "12px",
+      fontFamily: "'Inter', sans-serif",
+      gap: "12px",
     }}>
       <div style={{ fontSize: "48px" }}>🔒</div>
       <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#3e2f20", margin: 0 }}>
@@ -108,18 +108,18 @@ function UnauthorizedPage() {
 }
 
 
-function DefaultRedirect(){
-  const {user, isAuthenticated } = useAuth()
+function DefaultRedirect() {
+  const { user, isAuthenticated } = useAuth()
   if (!isAuthenticated) return <Navigate to="/login" replace />
-switch (user?.role) {
-  case ROLES.ADMIN:
-    case ROLES.MANAGER: return  <Navigate to="/admin/dashboard" replace />;
+  switch (user?.role) {
+    case ROLES.ADMIN:
+    case ROLES.MANAGER: return <Navigate to="/admin/dashboard" replace />;
     case ROLES.RECEPTIONIST: return <Navigate to="/receptionist/dashboard" replace />;
     case ROLES.HOUSEKEEPING: return <Navigate to="/housekeeping/dashboard" replace />;
-    case ROLES.GUEST:        return <Navigate to="/" replace />;
-    default:                 return <Navigate to="/" replace />;
+    case ROLES.GUEST: return <Navigate to="/" replace />;
+    default: return <Navigate to="/" replace />;
 
-}
+  }
 
 }
 
@@ -135,197 +135,197 @@ const DASHBOARD_ONLY_ROLES = {
 // showNav defaults to true — pass showNav={false} on internal/dashboard
 // routes (admin, receptionist, housekeeping, profile, settings, staff) so
 // logged-in users see the sidebar-driven layout without the public navbar.
-function Layout({ children, showFooter, showNav = true }){
+function Layout({ children, showFooter, showNav = true }) {
   const { user, isAuthenticated } = useAuth();
 
   if (showNav && isAuthenticated && DASHBOARD_ONLY_ROLES[user?.role]) {
     return <Navigate to={DASHBOARD_ONLY_ROLES[user.role]} replace />;
   }
 
-return(
-  <>
-  {showNav && <Navbar/>}
-  <main>{children}</main>
-  {showFooter && <Footer/> }
-  </>
-)
-}
-
-export default function App(){
   return (
-   <>
-   <Toaster position="top-center" toastOptions={{ duration: 3500 }} />
-   <Routes>
-      <Route path="/" element={
-        <Layout showFooter>
-          <HomePage/>
-        </Layout>
-      }/>
-
-
-
-
-     <Route path="/login" element={< LoginPage />} />
-    <Route path="/register" element={ <RegisterPAge/> } />
-
-  <Route path="/unauthorized" element={
-    <Layout>
-      <UnauthorizedPage/>
-    </Layout>
-  } />
-
-  <Route path="/dashboard" element={<DefaultRedirect/>} />
-
-  <Route path="/admin/dashboard" element={
-    <Layout showFooter={false} showNav={false}>
-      <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
-        <AdminDashboard/>
-      </RoleRoute>
-   </Layout>
-  } />
-
-  <Route path="/manager/dashboard" element={
-    <Layout showFooter={false} showNav= {false} >
-      <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
-        <ManagerDashboard />
-      </RoleRoute>
-   </Layout>
-  } />
-
-<Route path="/admin/services/catalog" element={
-  <Layout showFooter={false} showNav={false}>
-    <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
-      <ServiceCatalogPage />
-    </RoleRoute>
-  </Layout>
-} />
-
-  <Route
-  path="/receptionist/dashboard"
-  element={
-    <Layout showFooter={false} showNav={false}>
-      <RoleRoute
-        allowedRoles={[
-          ROLES.ADMIN,
-          ROLES.MANAGER,
-          ROLES.RECEPTIONIST,
-        ]}
-      >
-        <ReceptionistDashboard />
-      </RoleRoute>
-    </Layout>
-  }
-/>
-
-      <Route path="/admin/reports" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
-            <ReportsPage />
-          </RoleRoute>
-        </Layout>
-      } />
-
-<Route path="/settings" element={<SettingsPage />} />
-
-{/* housekeeping */}
-<Route
-  path="/services/newService"
-  element={<NewServicePage />}
-/>
-
-
-
-      <Route path="/housekeeping/dashboard" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
-            <HousekeepingPage />
-          </RoleRoute>
-        </Layout>
-      } />
-
-<Route path="/admin/services" element={
-        <Layout showFooter={false} showNav= {false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            <ServicesPage/>
-          </RoleRoute>
-        </Layout>
-      } />
-
-<Route
-  path="/booking/newbooking"
-element={
-      <NewBookingPage />
+    <>
+      {showNav && <Navbar />}
+      <main style={{ minHeight: "50vh" }}>{children}</main>
+      {showFooter && <Footer />}
+    </>
+  )
 }
-  />
-<Route path="/admin/bookings/edit/:id" element={<EditBookingPage />} />
 
-
-         <Route path="/admin/bookings" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            <BookingPage />
-          </RoleRoute>
-        </Layout>
-      } />
-
-
-      <Route path="/admin/rooms" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            <RoomManagement />
-          </RoleRoute>
-        </Layout>
-      } />
-
-     <Route path="/receptionist/bookings" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            <BookingPage />
-          </RoleRoute>
-        </Layout>
-      } />
-
-      <Route path="/receptionist/checkinout" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            <CheckInOut />
-          </RoleRoute>
-        </Layout>
-      } />
-
-         <Route path="/receptionist/billing/:bookingId?" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
-            < BillingPage />
-          </RoleRoute>
-        </Layout>
-      } />
-
-      <Route
-        path="/billing/:bookingId"
-        element={
+export default function App() {
+  return (
+    <>
+      <Toaster position="top-center" toastOptions={{ duration: 3500 }} />
+      <Routes>
+        <Route path="/" element={
           <Layout showFooter>
-            <RoleRoute
-              allowedRoles={[
-                ROLES.GUEST,
-                ROLES.ADMIN,
-                ROLES.MANAGER,
-                ROLES.RECEPTIONIST,
-              ]}
-            >
-              <BillingPage />
+            <HomePage />
+          </Layout>
+        } />
+
+
+
+
+        <Route path="/login" element={< LoginPage />} />
+        <Route path="/register" element={<RegisterPAge />} />
+
+        <Route path="/unauthorized" element={
+          <Layout>
+            <UnauthorizedPage />
+          </Layout>
+        } />
+
+        <Route path="/dashboard" element={<DefaultRedirect />} />
+
+        <Route path="/admin/dashboard" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
+              <AdminDashboard />
             </RoleRoute>
           </Layout>
-        }
-      />
-   <Route path="/admin/billing" element={
-  <Layout showFooter={false} showNav={false}>
-    <RoleRoute allowedRoles={[ROLES.ADMIN]}>
-      <BillingManagementPage />
-    </RoleRoute>
-  </Layout>
-} />
-      {/* <Route path="/receptionist/billing" element={
+        } />
+
+        <Route path="/manager/dashboard" element={
+          <Layout showFooter={false} showNav={false} >
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
+              <ManagerDashboard />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/admin/services/catalog" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
+              <ServiceCatalogPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route
+          path="/receptionist/dashboard"
+          element={
+            <Layout showFooter={false} showNav={false}>
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.ADMIN,
+                  ROLES.MANAGER,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <ReceptionistDashboard />
+              </RoleRoute>
+            </Layout>
+          }
+        />
+
+        <Route path="/admin/reports" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]}>
+              <ReportsPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/settings" element={<SettingsPage />} />
+
+        {/* housekeeping */}
+        <Route
+          path="/services/newService"
+          element={<NewServicePage />}
+        />
+
+
+
+        <Route path="/housekeeping/dashboard" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
+              <HousekeepingPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/admin/services" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              <ServicesPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route
+          path="/booking/newbooking"
+          element={
+            <NewBookingPage />
+          }
+        />
+        <Route path="/admin/bookings/edit/:id" element={<EditBookingPage />} />
+
+
+        <Route path="/admin/bookings" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              <BookingPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+
+        <Route path="/admin/rooms" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              <RoomManagement />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/receptionist/bookings" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              <BookingPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/receptionist/checkinout" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              <CheckInOut />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route path="/receptionist/billing/:bookingId?" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
+              < BillingPage />
+            </RoleRoute>
+          </Layout>
+        } />
+
+        <Route
+          path="/billing/:bookingId"
+          element={
+            <Layout showFooter>
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.GUEST,
+                  ROLES.ADMIN,
+                  ROLES.MANAGER,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <BillingPage />
+              </RoleRoute>
+            </Layout>
+          }
+        />
+        <Route path="/admin/billing" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN]}>
+              <BillingManagementPage />
+            </RoleRoute>
+          </Layout>
+        } />
+        {/* <Route path="/receptionist/billing" element={
         <Layout showFooter={false} showNav={false}>
           <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.RECEPTIONIST]}>
             < BillingPage />
@@ -334,219 +334,204 @@ element={
       } /> */}
 
 
-<Route path="/housekeeping/dashboard" element={
-        <Layout showFooter={false} showNav = {false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
-            <HousekeepingPage />
-          </RoleRoute>
-        </Layout>
-      } />
+        <Route path="/housekeeping/dashboard" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
+              <HousekeepingPage />
+            </RoleRoute>
+          </Layout>
+        } />
 
-            <Route path="/housekeeping/maintenance" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
-            < MaintenanceRequestPage />
-          </RoleRoute>
-        </Layout>
-      } />
+        <Route path="/housekeeping/maintenance" element={
+          <Layout showFooter={false} showNav={false}>
+            <RoleRoute allowedRoles={[ROLES.ADMIN, ROLES.HOUSEKEEPING]}>
+              < MaintenanceRequestPage />
+            </RoleRoute>
+          </Layout>
+        } />
 
-      {/* <Route path="/guest/dashboard" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.GUEST]}>
-            <GuestDashboard />
-          </RoleRoute>
-        </Layout>
-      } /> */}
+        <Route path="/guest/services" element={
+          <Layout showFooter={true} >
+            <RoleRoute allowedRoles={[ROLES.GUEST]}>
+              <GuestServices />
+            </RoleRoute>
+          </Layout>
+        } />
 
-      <Route path="/guest/services" element={
-        <Layout showFooter={true} >
-          <RoleRoute allowedRoles={[ROLES.GUEST]}>
-           <GuestServices/>
-          </RoleRoute>
-        </Layout>
-      } />
-            {/* <Route path="/guest/invoice" element={
-        <Layout showFooter={false} showNav={false}>
-          <RoleRoute allowedRoles={[ROLES.GUEST]}>
-            <BillingPage />
-          </RoleRoute>
-        </Layout>
-      } /> */}
+        <Route path="/guest/feedback" element={
+          <Layout showFooter={true} >
+            <RoleRoute allowedRoles={[ROLES.GUEST, ROLES.ADMIN, ROLES.MANAGER]}>
+              <FeedbackPage />
+            </RoleRoute>
+          </Layout>
+        } />
 
-            <Route path="/guest/feedback" element={
-        <Layout showFooter={true} >
-          <RoleRoute allowedRoles={[ROLES.GUEST, ROLES.ADMIN, ROLES.MANAGER]}>
-            <FeedbackPage />
-          </RoleRoute>
-        </Layout>
-      } />
+        <Route
+          path="/profile"
+          element={
+            <Layout showFooter={false} showNav={false}>
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.ADMIN,
+                  ROLES.MANAGER,
+                  ROLES.RECEPTIONIST,
+                  ROLES.HOUSEKEEPING,
+                  ROLES.GUEST,
+                ]}
+              >
+                <GuestProfilePage />
+              </RoleRoute>
+            </Layout>
+          }
+        />
 
-<Route
-  path="/profile"
-  element={
-    <Layout showFooter={false} showNav={false}>
-      <RoleRoute
-        allowedRoles={[
-          ROLES.ADMIN,
-          ROLES.MANAGER,
-          ROLES.RECEPTIONIST,
-          ROLES.HOUSEKEEPING,
-          ROLES.GUEST,
-        ]}
-      >
-        <GuestProfilePage />
-      </RoleRoute>
-    </Layout>
-  }
-/>
+        <Route path="/guest/servicesRequest" element={
+          <Layout showFooter={true}>
+            <RoleRoute allowedRoles={[ROLES.GUEST]}>
+              <ServiceRequestPage />
+            </RoleRoute>
+          </Layout>
+        } />
 
-<Route path="/guest/servicesRequest" element={
-        <Layout showFooter={true}>
-          <RoleRoute allowedRoles={[ROLES.GUEST]}>
-            <ServiceRequestPage/>
-          </RoleRoute>
-        </Layout>
-      } />
+        <Route path="/settings" element={
+          <Layout showFooter={false} showNav={false}>
+            <PrivateRoute>
+              <Placeholder title="Settings" owner="You (Leader)" />
+            </PrivateRoute>
+          </Layout>
+        } />
 
-            <Route path="/settings" element={
-        <Layout showFooter={false} showNav={false}>
-          <PrivateRoute>
-            <Placeholder title="Settings" owner="You (Leader)" />
-          </PrivateRoute>
-        </Layout>
-      } />
-
-            <Route path="*" element={
-        <Layout showFooter>
-          <NotFoundPage />
-        </Layout>
-      } />
-
-    <Route path="/contact" element={
-      <Layout showFooter>
-        <ContactPage/>
-      </Layout>
-    } />
+        <Route path="/contact" element={
+          <Layout showFooter>
+            <ContactPage />
+          </Layout>
+        } />
 
 
-    <Route path="/gallery" element={
-      <Layout showFooter>
-        <GalleryPage/>
-      </Layout>
-    } />
+        <Route path="/gallery" element={
+          <Layout showFooter>
+            <GalleryPage />
+          </Layout>
+        } />
 
 
 
-      <Route path="/privacypolicy" element={
-      <Layout showFooter>
-        <PrivacyPolicy/>
-      </Layout>
-    } />
+        <Route path="/privacypolicy" element={
+          <Layout showFooter>
+            <PrivacyPolicy />
+          </Layout>
+        } />
 
-      <Route path="/cookies" element={
-      <Layout showFooter>
-        <Cookies/>
-      </Layout>
-    } />
+        <Route path="/cookies" element={
+          <Layout showFooter>
+            <Cookies />
+          </Layout>
+        } />
 
-          <Route path="/terms" element={
-      <Layout showFooter>
-        <TermAndServices/>
-      </Layout>
-    } />
+        <Route path="/terms" element={
+          <Layout showFooter>
+            <TermAndServices />
+          </Layout>
+        } />
 
-<Route
-  path="/rooms"
-  element={
-    <Layout showFooter>
-      <Accommodations />
-    </Layout>
-  }
-/>
-<Route
-  path="/admin/rooms/edit/:id"
-  element={<EditRoom />}
-/>
+        <Route
+          path="/rooms"
+          element={
+            <Layout showFooter>
+              <Accommodations />
+            </Layout>
+          }
+        />
+        <Route
+          path="/admin/rooms/edit/:id"
+          element={<EditRoom />}
+        />
 
-<Route
-  path="/rooms/experience/:id"
-  element={
-    <Layout showFooter>
-  <RoomExperience />
-  </Layout>
-  }
-/>
+        <Route
+          path="/rooms/experience/:id"
+          element={
+            <Layout showFooter>
+              <RoomExperience />
+            </Layout>
+          }
+        />
 
-<Route
-  path="/admin/rooms/newroom"
-  element={<NewRoom />}
-/>
+        <Route
+          path="/admin/rooms/newroom"
+          element={<NewRoom />}
+        />
 
-<Route
-  path="/invoice"
-  element={
-    <Layout showFooter>
-      <Invoice />
-    </Layout>
-  }
-/>
-
-
-<Route
-  path="/PaymentForm"
-  element={
-    <Layout showFooter>
-      <PaymentForm />
-    </Layout>
-  }
-/>
-
-<Route
-  path="/about"
-  element={
-    <Layout showFooter>
-      <AboutUsPage />
-    </Layout>
-  }
-/>
-
-<Route
-  path="/amenities"
-  element={
-    <Layout showFooter>
-      <AmenitiesPage />
-    </Layout>
-  }
-/>
-
-<Route
-  path="/homeservice"
-  element={
-    <Layout showFooter>
-      <HomeService />
-    </Layout>
-  }
-/>
-
-<Route
-  path="/admin/staff-management"
-  element={
-    <Layout showFooter={false} showNav={false}>
-      <StaffManagement />
-    </Layout>
-  }
-/>
+        <Route
+          path="/invoice"
+          element={
+            <Layout showFooter>
+              <Invoice />
+            </Layout>
+          }
+        />
 
 
-<Route
-  path="/booking/newbooking"
-element={
-      <NewBookingModal />
-}
-  />
+        <Route
+          path="/PaymentForm"
+          element={
+            <Layout showFooter>
+              <PaymentForm />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <Layout showFooter>
+              <AboutUsPage />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/amenities"
+          element={
+            <Layout showFooter>
+              <AmenitiesPage />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/homeservice"
+          element={
+            <Layout showFooter>
+              <HomeService />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/admin/staff-management"
+          element={
+            <Layout showFooter={false} showNav={false}>
+              <StaffManagement />
+            </Layout>
+          }
+        />
 
 
-    </Routes>
-   </>
+        <Route
+          path="/booking/newbooking"
+          element={
+            <NewBookingModal />
+          }
+        />
+
+        <Route path="*" element={
+          <Layout showFooter>
+            <NotFoundPage />
+          </Layout>
+        } />
+
+
+      </Routes>
+    </>
   )
 }

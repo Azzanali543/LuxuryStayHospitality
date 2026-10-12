@@ -1,6 +1,7 @@
-// Express app entry point
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 const serviceRoutes = require("./routes/serviceRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const express = require("express");
@@ -9,27 +10,36 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-const userRoutes = require("./routes/userRoutes");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 require("./config/cloudinary");
 
-// Connect to MongoDB
-dotenv.config();
-
-connectDB();
- 
 const app = express();
-// security Headers
-app.use(helmet());
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
- 
- 
-// Middleware
+
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -55,7 +65,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
  // Routes
  app.use('/api/contact', require('./routes/contactRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use("/api/staff", require("./routes/staffRoutes"));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
@@ -66,7 +75,6 @@ app.use('/api/housekeeping', require('./routes/housekeepingRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/feedback', require('./routes/feedbackRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
-app.use('/api/housekeeping', require('./routes/housekeepingRoutes')); 
 
 // Health check
 app.get("/", (req, res) => {
@@ -93,7 +101,17 @@ app.use((err, req, res, next) => {
 
 
 const PORT = process.env.PORT || 5000;
- 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+// Connect to MongoDB before accepting API traffic. This prevents the frontend
+// from racing the database connection during startup.
+(async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server startup failed:", error.message);
+    process.exit(1);
+  }
+})();
